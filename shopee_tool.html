@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Shopee Taiwan ツール</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --shopee: #EE4D2D; --shopee2: #ff7337; --shopee-light: #fff2ef;
+      --bg: #f4f5f7; --card: #fff;
+      --text: #1a1a1a; --muted: #6b7280; --border: #e5e7eb;
+      --green: #16a34a; --red: #dc2626;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', sans-serif;
+      background: var(--bg); color: var(--text);
+    }
+
+    /* ── Header / Tabs ── */
+    .header {
+      background: linear-gradient(135deg, var(--shopee), var(--shopee2));
+      color: white; padding: 14px 16px 0;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(238,77,45,.3);
+    }
+    .header h1 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .tabs { display: flex; gap: 4px; }
+    .tab {
+      flex: 1; padding: 10px 8px;
+      background: rgba(255,255,255,.15); border: none;
+      border-radius: 10px 10px 0 0;
+      color: rgba(255,255,255,.7);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all .15s; font-family: inherit;
+    }
+    .tab.active { background: var(--bg); color: var(--shopee); }
+
+    /* ── Content ── */
+    .tab-content { display: none; padding: 12px; }
+    .tab-content.active { display: block; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card); border-radius: 14px;
+      padding: 18px 16px; margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.07);
+    }
+    .card-title {
+      font-size: 13px; font-weight: 700; color: var(--shopee);
+      margin-bottom: 14px; padding-bottom: 8px;
+      border-bottom: 2px solid var(--shopee-light);
+    }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 12px; }
+    .form-group:last-child { margin-bottom: 0; }
+    label {
+      display: block; font-size: 11px; font-weight: 700;
+      color: var(--muted); margin-bottom: 5px;
+      text-transform: uppercase; letter-spacing: .4px;
+    }
+    input[type="text"], input[type="number"], select {
+      width: 100%; padding: 11px 13px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      font-size: 16px; color: var(--text); background: white;
+      outline: none; transition: border-color .2s;
+      -webkit-appearance: none; appearance: none;
+    }
+    input:focus, select:focus { border-color: var(--shopee); }
+    input::placeholder { color: #c4c4c4; }
+
+    .input-row { display: flex; gap: 8px; }
+    .input-row input { flex: 1; }
+
+    .unit-wrap { position: relative; }
+    .unit-wrap input { padding-right: 46px; }
+    .unit {
+      position: absolute; right: 13px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px; color: var(--muted); pointer-events: none;
+    }
+
+    /* ── Toggle buttons ── */
+    .toggle-row { display: flex; gap: 8px; }
+    .toggle-btn {
+      flex: 1; padding: 10px 6px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      background: white; font-size: 14px; font-weight: 500;
+      color: var(--muted); cursor: pointer; text-align: center;
+      transition: all .15s; font-family: inherit;
+    }
+    .toggle-btn.on {
+      border-color: var(--shopee); background: var(--shopee);
+      color: white; font-weight: 700;
+    }
+    .hint { font-size: 11px; color: var(--muted); margin-top: 5px; }
+
+    /* ── Buttons ── */
+    .btn {
+      padding: 11px 18px; border-radius: 10px; border: none;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: opacity .15s; font-family: inherit; white-space: nowrap;
+    }
+    .btn-primary   { background: var(--shopee); color: white; }
+    .btn-secondary { background: #f3f4f6; color: var(--text); }
+    .btn:active { opacity: .8; }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .btn-full {
+      width: 100%; padding: 14px; border-radius: 12px; border: none;
+      font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: opacity .15s;
+    }
+    .btn-full:active { opacity: .85; }
+
+    /* ── Search tab ── */
+    .translation-result {
+      background: #eff6ff; border: 1px solid #bfdbfe;
+      border-radius: 10px; padding: 12px 14px; margin-top: 10px;
+    }
+    .translation-result .t-label { font-size: 11px; color: #3b82f6; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+    .translation-result .zh { font-size: 22px; font-weight: 700; color: #1d4ed8; }
+    .translation-result .url-text { font-size: 11px; color: #6b7280; margin-top: 6px; word-break: break-all; }
+    .open-btn { background: linear-gradient(135deg, var(--shopee), var(--shopee2)); color: white; margin-top: 12px; }
+    .copy-btn { background: #f3f4f6; color: var(--text); margin-top: 8px; font-size: 14px; }
+
+    /* ── Rate banner ── */
+    .rate-banner {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; flex-wrap: wrap;
+      background: #eff6ff; border: 1px solid #bfdbfe;
+      border-radius: 10px; padding: 8px 14px; margin-bottom: 12px;
+      font-size: 12px; color: #1d4ed8;
+    }
+    .rate-banner input[type="number"] {
+      width: 80px; padding: 5px 8px;
+      border: 2px solid #93c5fd; border-radius: 8px;
+      font-size: 15px; font-weight: 700; color: #1d4ed8;
+      text-align: center; background: white; outline: none;
+    }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0; animation: pulse 2s ease-in-out infinite; }
+    .pulse.err { background: #ef4444; animation: none; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.35} }
+    .refresh-link { background: none; border: none; cursor: pointer; font-size: 12px; color: #2563eb; text-decoration: underline; padding: 0; }
+
+    /* ── Profit card ── */
+    .profit-card {
+      border-radius: 16px; padding: 22px 20px;
+      text-align: center; color: white; margin-bottom: 12px;
+      background: linear-gradient(135deg, #94a3b8, #64748b);
+      transition: background .3s;
+    }
+    .profit-card.pos { background: linear-gradient(135deg, #22c55e, #15803d); }
+    .profit-card.neg { background: linear-gradient(135deg, #f87171, #dc2626); }
+    .profit-label  { font-size: 11px; opacity: .85; margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .profit-amount { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
+    .profit-sub    { font-size: 13px; opacity: .8; }
+
+    /* ── Result rows ── */
+    .result-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px;
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-lbl { color: var(--muted); }
+    .result-val { font-weight: 700; }
+    .result-val.minus { color: var(--red); }
+    .result-val.plus  { color: var(--green); }
+
+    /* ── Settings ── */
+    .settings-btn {
+      width: 100%; background: none; border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 11px 14px; font-size: 13px;
+      color: var(--muted); cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center; font-family: inherit;
+    }
+    .settings-panel { display: none; margin-top: 14px; }
+    .settings-panel.open { display: block; }
+
+    .section-sep {
+      display: flex; align-items: center; gap: 10px; margin: 14px 0 10px;
+    }
+    .section-sep span { font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap; text-transform: uppercase; letter-spacing: .5px; }
+    .section-sep::before, .section-sep::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    .mini-wrap { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .mini-label { font-size: 14px; }
+    .mini-input {
+      width: 90px; padding: 5px 8px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      font-size: 14px; outline: none; text-align: right; font-family: inherit;
+    }
+    .mini-input:focus { border-color: var(--shopee); }
+
+    .rate-tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .rate-tbl th { background: #f9fafb; padding: 7px 8px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .rate-tbl td { padding: 5px 6px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    .rate-tbl td:last-child { text-align: right; }
+    .rate-tbl input { width: 88px; padding: 5px 8px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; text-align: right; outline: none; font-family: inherit; }
+    .rate-tbl input:focus { border-color: var(--shopee); }
+
+    /* ── Spinner ── */
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <h1>🛒 Shopee Taiwan ツール</h1>
+  <div class="tabs">
+    <button class="tab active" id="tab-btn-search" onclick="switchTab('search')">🔍 検索サポート</button>
+    <button class="tab"        id="tab-btn-calc"   onclick="switchTab('calc')">💰 利益計算</button>
+  </div>
+</div>
+
+<!-- ══════════ TAB 1: 検索 ══════════ -->
+<div class="tab-content active" id="tab-search">
+  <div class="card">
+    <div class="card-title">🔍 日本語で商品を検索</div>
+    <div class="input-row">
+      <input type="text" id="searchInput" placeholder="例：ネイルシール、リストバンド"
+             onkeydown="if(event.key==='Enter') doSearch()">
+      <button class="btn btn-primary" id="searchBtn" onclick="doSearch()">翻訳</button>
+    </div>
+    <div id="searchResult" style="display:none;">
+      <div class="translation-result">
+        <div class="t-label">台湾語（繁体字）</div>
+        <div class="zh" id="searchZh"></div>
+        <div class="url-text" id="searchUrl"></div>
+      </div>
+      <button class="btn-full open-btn" onclick="openShopee()">🛒 Shopee台湾で検索する ↗</button>
+      <button class="btn-full copy-btn" onclick="copyUrl(event)" style="margin-top:8px;">📋 URLをコピー</button>
+    </div>
+  </div>
+  <div class="card" style="padding:14px 16px;">
+    <div style="font-size:13px; color:var(--muted); line-height:1.7;">
+      <b>使い方</b><br>
+      ① 日本語で商品名を入力 →「翻訳」をタップ<br>
+      ② 「Shopeeで検索する」をタップ → ブラウザで開く<br>
+      ③ 気になる商品の価格をメモして「利益計算」タブへ
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TAB 2: 利益計算 ══════════ -->
+<div class="tab-content" id="tab-calc">
+
+  <!-- 為替レート -->
+  <div class="rate-banner">
+    <span class="pulse" id="rateDot"></span>
+    <span id="rateText">為替レート取得中...</span>
+    <span>1 TWD =</span>
+    <input type="number" id="rateInput" step="0.0001" placeholder="4.5" oninput="calcProfit()">
+    <span>JPY</span>
+    <button class="refresh-link" onclick="fetchRate()">更新</button>
+  </div>
+
+  <!-- 入力 -->
+  <div class="card">
+    <div class="card-title">📊 利益計算</div>
+
+    <div class="form-group">
+      <label>販売価格 (TWD)</label>
+      <div class="unit-wrap">
+        <input type="number" id="sellPrice" placeholder="例：350" oninput="calcProfit()">
+        <span class="unit">TWD</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>仕入価格 (JPY・税込)</label>
+      <div class="unit-wrap">
+        <input type="number" id="costPrice" placeholder="例：1500" oninput="calcProfit()">
+        <span class="unit">円</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>商品重量（国際送料の自動計算に使用）</label>
+      <div class="unit-wrap">
+        <input type="number" id="weight" placeholder="例：300" oninput="calcProfit()">
+        <span class="unit">g</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>厚さ3cm以内ですか？</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="btnThinY" onclick="setThin(true)">Yes（薄型）</button>
+        <button class="toggle-btn"   id="btnThinN" onclick="setThin(false)">No（通常）</button>
+      </div>
+      <div class="hint" id="thinHint">ゆうパケット等の薄型送料が適用されます</div>
+    </div>
+
+    <div id="normalGroup" style="display:none;">
+      <div class="form-group">
+        <label>国内配送方法</label>
+        <div class="toggle-row">
+          <button class="toggle-btn on" id="btnYamato" onclick="setCarrier('yamato')">ヤマト便</button>
+          <button class="toggle-btn"   id="btnYubin"  onclick="setCarrier('yubin')">郵便（ゆうパック）</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>荷物サイズ</label>
+        <select id="boxSize" onchange="calcProfit()">
+          <option value="">-- サイズを選択 --</option>
+          <option value="60">60サイズ（3辺合計 60cm以内）</option>
+          <option value="80">80サイズ（3辺合計 80cm以内）</option>
+          <option value="100">100サイズ（3辺合計 100cm以内）</option>
+          <option value="120">120サイズ（3辺合計 120cm以内）</option>
+          <option value="140">140サイズ（3辺合計 140cm以内）</option>
+          <option value="160">160サイズ（3辺合計 160cm以内）</option>
+          <option value="170" id="opt170">170サイズ（郵便のみ）</option>
+          <option value="180" id="opt180">180サイズ（ヤマトのみ）</option>
+          <option value="200" id="opt200">200サイズ（ヤマトのみ）</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 詳細設定 -->
+    <button class="settings-btn" onclick="toggleSettings()">
+      <span>⚙️ 詳細設定（手数料・送料テーブル変更）</span>
+      <span id="settingsArrow">▼</span>
+    </button>
+    <div class="settings-panel" id="settingsPanel">
+
+      <div class="section-sep"><span>基本設定</span></div>
+      <div class="mini-wrap">
+        <span class="mini-label">Shopee手数料率</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <input type="number" class="mini-input" id="feeRate" value="15" step="0.5"
+                 oninput="document.getElementById('feeRateDisp').textContent=this.value; calcProfit()">
+          <span style="font-size:13px;color:var(--muted);">%</span>
+        </div>
+      </div>
+      <div class="mini-wrap">
+        <span class="mini-label">薄型送料（3cm以内）</span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <input type="number" class="mini-input" id="thinRate" value="385" oninput="calcProfit()">
+          <span style="font-size:13px;color:var(--muted);">円</span>
+        </div>
+      </div>
+
+      <div class="section-sep"><span>ヤマト便 送料（南東北発・変更可）</span></div>
+      <table class="rate-tbl">
+        <tr><th>サイズ</th><th>送料（円）</th></tr>
+        <tr><td>60サイズ</td>  <td><input type="number" class="yrate" data-s="60"  value="790"  oninput="calcProfit()"></td></tr>
+        <tr><td>80サイズ</td>  <td><input type="number" class="yrate" data-s="80"  value="1090" oninput="calcProfit()"></td></tr>
+        <tr><td>100サイズ</td> <td><input type="number" class="yrate" data-s="100" value="1410" oninput="calcProfit()"></td></tr>
+        <tr><td>120サイズ</td> <td><input type="number" class="yrate" data-s="120" value="1730" oninput="calcProfit()"></td></tr>
+        <tr><td>140サイズ</td> <td><input type="number" class="yrate" data-s="140" value="2090" oninput="calcProfit()"></td></tr>
+        <tr><td>160サイズ</td> <td><input type="number" class="yrate" data-s="160" value="2410" oninput="calcProfit()"></td></tr>
+        <tr><td>180サイズ</td> <td><input type="number" class="yrate" data-s="180" value="3030" oninput="calcProfit()"></td></tr>
+        <tr><td>200サイズ</td> <td><input type="number" class="yrate" data-s="200" value="3690" oninput="calcProfit()"></td></tr>
+      </table>
+
+      <div class="section-sep"><span>郵便（ゆうパック）送料（変更可）</span></div>
+      <table class="rate-tbl">
+        <tr><th>サイズ</th><th>送料（円）</th></tr>
+        <tr><td>60サイズ</td>  <td><input type="number" class="erate" data-s="60"  value="880"  oninput="calcProfit()"></td></tr>
+        <tr><td>80サイズ</td>  <td><input type="number" class="erate" data-s="80"  value="1200" oninput="calcProfit()"></td></tr>
+        <tr><td>100サイズ</td> <td><input type="number" class="erate" data-s="100" value="1500" oninput="calcProfit()"></td></tr>
+        <tr><td>120サイズ</td> <td><input type="number" class="erate" data-s="120" value="1830" oninput="calcProfit()"></td></tr>
+        <tr><td>140サイズ</td> <td><input type="number" class="erate" data-s="140" value="2170" oninput="calcProfit()"></td></tr>
+        <tr><td>160サイズ</td> <td><input type="number" class="erate" data-s="160" value="2500" oninput="calcProfit()"></td></tr>
+        <tr><td>170サイズ</td> <td><input type="number" class="erate" data-s="170" value="3070" oninput="calcProfit()"></td></tr>
+      </table>
+
+      <div class="section-sep"><span>台湾SLS 国際送料（変更可）</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">※ Shopeeの最新SLS料金表に合わせて更新してください</div>
+      <table class="rate-tbl">
+        <tr><th>重量（g以下）</th><th>送料（円）</th></tr>
+        <tr><td>〜 100g</td>   <td><input type="number" class="srate" data-w="100"  value="500"  oninput="onSlsChange()"></td></tr>
+        <tr><td>〜 200g</td>   <td><input type="number" class="srate" data-w="200"  value="600"  oninput="onSlsChange()"></td></tr>
+        <tr><td>〜 300g</td>   <td><input type="number" class="srate" data-w="300"  value="700"  oninput="onSlsChange()"></td></tr>
+        <tr><td>〜 400g</td>   <td><input type="number" class="srate" data-w="400"  value="800"  oninput="onSlsChange()"></td></tr>
+        <tr><td>〜 500g</td>   <td><input type="number" class="srate" data-w="500"  value="900"  oninput="onSlsChange()"></td></tr>
+        <tr><td>〜 700g</td>   <td><input type="number" class="srate" data-w="700"  value="1100" oninput="onSlsChange()"></td></tr>
+        <tr><td>〜 1000g</td>  <td><input type="number" class="srate" data-w="1000" value="1400" oninput="onSlsChange()"></td></tr>
+        <tr><td>〜 1500g</td>  <td><input type="number" class="srate" data-w="1500" value="1900" oninput="onSlsChange()"></td></tr>
+        <tr><td>〜 2000g</td>  <td><input type="number" class="srate" data-w="2000" value="2400" oninput="onSlsChange()"></td></tr>
+        <tr><td>〜 3000g</td>  <td><input type="number" class="srate" data-w="3000" value="3200" oninput="onSlsChange()"></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 利益カード -->
+  <div class="profit-card" id="profitCard">
+    <div class="profit-label">最終利益</div>
+    <div class="profit-amount" id="profitAmt">¥ —</div>
+    <div class="profit-sub" id="profitSub">全項目を入力してください</div>
+  </div>
+
+  <!-- 収支内訳 -->
+  <div class="card">
+    <div class="card-title">📋 収支内訳</div>
+    <div class="result-row">
+      <span class="result-lbl">売上（JPY換算）</span>
+      <span class="result-val plus" id="rSales">—</span>
+    </div>
+    <div class="result-row">
+      <span class="result-lbl">Shopee手数料（<span id="feeRateDisp">15</span>%）</span>
+      <span class="result-val minus" id="rFee">—</span>
+    </div>
+    <div class="result-row">
+      <span class="result-lbl">手取り金額</span>
+      <span class="result-val" id="rNet">—</span>
+    </div>
+    <div class="result-row">
+      <span class="result-lbl">仕入価格</span>
+      <span class="result-val minus" id="rCost">—</span>
+    </div>
+    <div class="result-row">
+      <span class="result-lbl" id="domLabel">国内送料</span>
+      <span class="result-val minus" id="rDom">—</span>
+    </div>
+    <div class="result-row">
+      <span class="result-lbl" id="intlLabel">国際送料（台湾SLS）</span>
+      <span class="result-val minus" id="rIntl">—</span>
+    </div>
+  </div>
+
+  <div style="text-align:center; font-size:11px; color:#c0c0c0; padding:8px 0 28px;">
+    ※ 為替・SLS送料は参考値です。実際の数値で更新してください。
+  </div>
+</div>
+
+<script>
+  // ── Tab switch ──────────────────────────────────────────────────────────────
+  function switchTab(name) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('tab-btn-' + name).classList.add('active');
+  }
+
+  // ── TAB 1: Search ───────────────────────────────────────────────────────────
+  let currentSearchUrl = '';
+
+  async function doSearch() {
+    const q = document.getElementById('searchInput').value.trim();
+    if (!q) return;
+    const btn = document.getElementById('searchBtn');
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+    document.getElementById('searchResult').style.display = 'none';
+    try {
+      const res  = await fetch(
+        'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=zh-TW&dt=t&q=' + encodeURIComponent(q)
+      );
+      const data = await res.json();
+      const zh   = data[0].map(p => p[0]).filter(Boolean).join('');
+      const url  = 'https://shopee.tw/search?keyword=' + encodeURIComponent(zh) + '&by=relevancy&order=desc';
+      document.getElementById('searchZh').textContent  = zh;
+      document.getElementById('searchUrl').textContent = url;
+      currentSearchUrl = url;
+      document.getElementById('searchResult').style.display = 'block';
+    } catch { alert('翻訳に失敗しました。インターネット接続を確認してください。'); }
+    finally { btn.disabled = false; btn.textContent = '翻訳'; }
+  }
+
+  function openShopee() { if (currentSearchUrl) window.open(currentSearchUrl, '_blank'); }
+
+  function copyUrl(evt) {
+    if (!currentSearchUrl) return;
+    navigator.clipboard.writeText(currentSearchUrl).then(() => {
+      const btn = evt.currentTarget;
+      const orig = btn.textContent;
+      btn.textContent = '✅ コピーしました';
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  }
+
+  // ── Shipping state ──────────────────────────────────────────────────────────
+  let isThin  = true;
+  let carrier = 'yamato';
+
+  function setThin(val) {
+    isThin = val;
+    document.getElementById('btnThinY').classList.toggle('on',  val);
+    document.getElementById('btnThinN').classList.toggle('on', !val);
+    document.getElementById('normalGroup').style.display = val ? 'none' : 'block';
+    document.getElementById('thinHint').textContent = val
+      ? 'ゆうパケット等の薄型送料が適用されます'
+      : 'ヤマト便または郵便（ゆうパック）送料が適用されます';
+    calcProfit();
+  }
+
+  function setCarrier(c) {
+    carrier = c;
+    document.getElementById('btnYamato').classList.toggle('on', c === 'yamato');
+    document.getElementById('btnYubin').classList.toggle('on',  c === 'yubin');
+    const sel = document.getElementById('boxSize');
+    document.getElementById('opt180').disabled = (c === 'yubin');
+    document.getElementById('opt200').disabled = (c === 'yubin');
+    document.getElementById('opt170').disabled = (c === 'yamato');
+    if (c === 'yubin'  && (sel.value === '180' || sel.value === '200')) sel.value = '';
+    if (c === 'yamato' && sel.value === '170') sel.value = '';
+    calcProfit();
+  }
+
+  function getDomesticRate() {
+    if (isThin) return parseFloat(document.getElementById('thinRate').value) || 385;
+    const size = document.getElementById('boxSize').value;
+    if (!size) return null;
+    const cls = carrier === 'yamato' ? '.yrate' : '.erate';
+    const el  = document.querySelector(cls + '[data-s="' + size + '"]');
+    return el ? parseFloat(el.value) || 0 : null;
+  }
+
+  // SLS rate cache — rebuilt only when a srate input changes, not on every calcProfit()
+  let slsCache = [];
+
+  function buildSlsCache() {
+    slsCache = [...document.querySelectorAll('.srate')]
+      .map(el => ({ limit: parseInt(el.dataset.w), rate: parseFloat(el.value) || 0 }))
+      .sort((a, b) => a.limit - b.limit);
+  }
+
+  function onSlsChange() { buildSlsCache(); calcProfit(); }
+
+  function getSlsRate(g) {
+    if (isNaN(g) || g <= 0) return null;
+    for (const r of slsCache) if (g <= r.limit) return r.rate;
+    return slsCache[slsCache.length - 1]?.rate ?? null;
+  }
+
+  // ── Exchange rate ───────────────────────────────────────────────────────────
+  const DEFAULT_RATE = 4.50;
+
+  async function fetchRate() {
+    const dot  = document.getElementById('rateDot');
+    const text = document.getElementById('rateText');
+    dot.className = 'pulse';
+    text.textContent = '取得中...';
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 6000);
+      const res  = await fetch('https://api.frankfurter.app/latest?from=TWD&to=JPY', { signal: controller.signal });
+      clearTimeout(timer);
+      const data = await res.json();
+      document.getElementById('rateInput').value = data.rates.JPY.toFixed(4);
+      text.textContent = 'リアルタイム（' + data.date + '）';
+    } catch {
+      if (!document.getElementById('rateInput').value)
+        document.getElementById('rateInput').value = DEFAULT_RATE.toFixed(2);
+      text.textContent = '自動取得失敗 → 手動修正可';
+      dot.className = 'pulse err';
+    }
+    calcProfit();
+  }
+
+  // ── Profit calculation ──────────────────────────────────────────────────────
+  function yen(n)  { return '¥' + Math.round(Math.abs(n)).toLocaleString('ja-JP'); }
+  function myen(n) { return '−¥' + Math.round(Math.abs(n)).toLocaleString('ja-JP'); }
+
+  function calcProfit() {
+    const rate   = parseFloat(document.getElementById('rateInput').value);
+    const sell   = parseFloat(document.getElementById('sellPrice').value);
+    const cost   = parseFloat(document.getElementById('costPrice').value);
+    const weight = parseFloat(document.getElementById('weight').value);
+    const feeR   = (parseFloat(document.getElementById('feeRate').value) || 0) / 100;
+
+    const salesJPY = (sell > 0 && rate > 0) ? sell * rate : null;
+    const fee      = salesJPY != null ? salesJPY * feeR  : null;
+    const net      = salesJPY != null ? salesJPY - fee   : null;
+    const hasCost  = !isNaN(cost) && cost >= 0;
+
+    const domShip  = getDomesticRate();
+    const intlShip = getSlsRate(weight);
+
+    const domMethodStr = isThin
+      ? '薄型 ' + (parseFloat(document.getElementById('thinRate').value) || 385) + '円'
+      : (carrier === 'yamato' ? 'ヤマト便' : '郵便') + (document.getElementById('boxSize').value ? ' ' + document.getElementById('boxSize').value + 'サイズ' : '');
+    const intlWeightStr = weight > 0 && !isNaN(weight) ? weight + 'g → SLS' : '台湾SLS';
+    document.getElementById('domLabel').textContent  = '国内送料（' + domMethodStr + '）';
+    document.getElementById('intlLabel').textContent = '国際送料（' + intlWeightStr + '）';
+
+    setRow('rSales', salesJPY != null ? yen(salesJPY)  : '—', false);
+    setRow('rFee',   fee      != null ? myen(fee)       : '—', true);
+    setRow('rNet',   net      != null ? yen(net)        : '—', false);
+    setRow('rCost',  hasCost           ? myen(cost)     : '—', true);
+    setRow('rDom',   domShip  != null  ? myen(domShip)  : '—', true);
+    setRow('rIntl',  intlShip != null  ? myen(intlShip) : '—', true);
+
+    const card = document.getElementById('profitCard');
+    const amt  = document.getElementById('profitAmt');
+    const sub  = document.getElementById('profitSub');
+    card.classList.remove('pos', 'neg');
+
+    if (net != null && hasCost && domShip != null && intlShip != null) {
+      const profit = net - cost - domShip - intlShip;
+      card.classList.add(profit >= 0 ? 'pos' : 'neg');
+      amt.textContent = (profit < 0 ? '−' : '') + yen(profit);
+      const margin = salesJPY > 0 ? ((profit / salesJPY) * 100).toFixed(1) : '0.0';
+      sub.textContent = '利益率 ' + margin + '%（売上比）';
+    } else {
+      amt.textContent = '¥ —';
+      const missing = [];
+      if (salesJPY == null)                        missing.push('販売価格');
+      if (!hasCost)                                missing.push('仕入価格');
+      if (isNaN(weight) || weight <= 0)            missing.push('重量');
+      if (!isThin && !document.getElementById('boxSize').value) missing.push('荷物サイズ');
+      sub.textContent = missing.length ? '未入力: ' + missing.join('・') : '計算中...';
+    }
+  }
+
+  function setRow(id, val, isMinus) {
+    const el = document.getElementById(id);
+    el.textContent = val;
+    el.className = 'result-val' + (isMinus && val !== '—' ? ' minus' : '');
+  }
+
+  function toggleSettings() {
+    const p = document.getElementById('settingsPanel');
+    const a = document.getElementById('settingsArrow');
+    p.classList.toggle('open');
+    a.textContent = p.classList.contains('open') ? '▲' : '▼';
+  }
+
+  // ── Init ────────────────────────────────────────────────────────────────────
+  document.getElementById('rateInput').value = DEFAULT_RATE.toFixed(2);
+  buildSlsCache();
+  fetchRate();
+</script>
+</body>
+</html>
