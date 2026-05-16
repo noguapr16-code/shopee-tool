@@ -126,6 +126,7 @@
     .translation-result .url-text { font-size: 11px; color: #6b7280; margin-top: 6px; word-break: break-all; }
     .open-btn { background: linear-gradient(135deg, var(--shopee), var(--shopee2)); color: white; margin-top: 12px; }
     .copy-btn { background: #f3f4f6; color: var(--text); margin-top: 8px; font-size: 14px; }
+    .deepl-btn { background: #042b48; color: white; margin-top: 8px; font-size: 14px; }
 
     /* ── Rate banner ── */
     .rate-banner {
@@ -235,6 +236,7 @@
       </div>
       <button class="btn-full open-btn" onclick="openShopee()">🛒 Shopee台湾で検索する ↗</button>
       <button class="btn-full copy-btn" onclick="copyUrl(event)" style="margin-top:8px;">📋 URLをコピー</button>
+      <button class="btn-full deepl-btn" onclick="openDeepL()">📝 DeepLで翻訳を確認・修正 ↗</button>
     </div>
   </div>
   <div class="card" style="padding:14px 16px;">
@@ -242,7 +244,8 @@
       <b>使い方</b><br>
       ① 日本語で商品名を入力 →「翻訳」をタップ<br>
       ② 「Shopeeで検索する」をタップ → ブラウザで開く<br>
-      ③ 気になる商品の価格をメモして「利益計算」タブへ
+      ③ DeepLボタンで翻訳の品質確認・修正も可能<br>
+      ④ 気になる商品の価格をメモして「利益計算」タブへ
     </div>
   </div>
 </div>
@@ -281,7 +284,7 @@
     </div>
 
     <div class="form-group">
-      <label>商品重量（国際送料の自動計算に使用）</label>
+      <label>商品重量（台湾SLS送料の自動計算に使用）</label>
       <div class="unit-wrap">
         <input type="number" id="weight" placeholder="例：300" oninput="calcProfit()">
         <span class="unit">g</span>
@@ -294,7 +297,7 @@
         <button class="toggle-btn on" id="btnThinY" onclick="setThin(true)">Yes（薄型）</button>
         <button class="toggle-btn"   id="btnThinN" onclick="setThin(false)">No（通常）</button>
       </div>
-      <div class="hint" id="thinHint">ゆうパケット等の薄型送料が適用されます</div>
+      <div class="hint" id="thinHint">クリックポスト 185円が適用されます</div>
     </div>
 
     <div id="normalGroup" style="display:none;">
@@ -303,6 +306,13 @@
         <div class="toggle-row">
           <button class="toggle-btn on" id="btnYamato" onclick="setCarrier('yamato')">ヤマト便</button>
           <button class="toggle-btn"   id="btnYubin"  onclick="setCarrier('yubin')">郵便（ゆうパック）</button>
+        </div>
+      </div>
+      <div class="form-group" id="nyanpayGroup">
+        <label>ニャンペイ割引（12%オフ）を使う？</label>
+        <div class="toggle-row">
+          <button class="toggle-btn"   id="btnNyanY" onclick="setNyanpay(true)">使う</button>
+          <button class="toggle-btn on" id="btnNyanN" onclick="setNyanpay(false)">使わない</button>
         </div>
       </div>
       <div class="form-group">
@@ -339,9 +349,9 @@
         </div>
       </div>
       <div class="mini-wrap">
-        <span class="mini-label">薄型送料（3cm以内）</span>
+        <span class="mini-label">クリックポスト料金（3cm以内）</span>
         <div style="display:flex;align-items:center;gap:4px;">
-          <input type="number" class="mini-input" id="thinRate" value="385" oninput="calcProfit()">
+          <input type="number" class="mini-input" id="thinRate" value="185" oninput="calcProfit()">
           <span style="font-size:13px;color:var(--muted);">円</span>
         </div>
       </div>
@@ -371,21 +381,11 @@
         <tr><td>170サイズ</td> <td><input type="number" class="erate" data-s="170" value="3070" oninput="calcProfit()"></td></tr>
       </table>
 
-      <div class="section-sep"><span>台湾SLS 国際送料（変更可）</span></div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">※ Shopeeの最新SLS料金表に合わせて更新してください</div>
-      <table class="rate-tbl">
-        <tr><th>重量（g以下）</th><th>送料（円）</th></tr>
-        <tr><td>〜 100g</td>   <td><input type="number" class="srate" data-w="100"  value="500"  oninput="onSlsChange()"></td></tr>
-        <tr><td>〜 200g</td>   <td><input type="number" class="srate" data-w="200"  value="600"  oninput="onSlsChange()"></td></tr>
-        <tr><td>〜 300g</td>   <td><input type="number" class="srate" data-w="300"  value="700"  oninput="onSlsChange()"></td></tr>
-        <tr><td>〜 400g</td>   <td><input type="number" class="srate" data-w="400"  value="800"  oninput="onSlsChange()"></td></tr>
-        <tr><td>〜 500g</td>   <td><input type="number" class="srate" data-w="500"  value="900"  oninput="onSlsChange()"></td></tr>
-        <tr><td>〜 700g</td>   <td><input type="number" class="srate" data-w="700"  value="1100" oninput="onSlsChange()"></td></tr>
-        <tr><td>〜 1000g</td>  <td><input type="number" class="srate" data-w="1000" value="1400" oninput="onSlsChange()"></td></tr>
-        <tr><td>〜 1500g</td>  <td><input type="number" class="srate" data-w="1500" value="1900" oninput="onSlsChange()"></td></tr>
-        <tr><td>〜 2000g</td>  <td><input type="number" class="srate" data-w="2000" value="2400" oninput="onSlsChange()"></td></tr>
-        <tr><td>〜 3000g</td>  <td><input type="number" class="srate" data-w="3000" value="3200" oninput="onSlsChange()"></td></tr>
-      </table>
+      <div class="section-sep"><span>台湾SLS 国際送料</span></div>
+      <div style="font-size:12px;color:var(--muted);padding:6px 0 4px;line-height:1.6;">
+        重量から自動計算（50g刻みで切り上げ）<br>
+        例：300g → TWD62.7 / 1000g → TWD153.7
+      </div>
     </div>
   </div>
 
@@ -426,7 +426,7 @@
   </div>
 
   <div style="text-align:center; font-size:11px; color:#c0c0c0; padding:8px 0 28px;">
-    ※ 為替・SLS送料は参考値です。実際の数値で更新してください。
+    ※ 為替・SLS送料は参考値です。実際の数値で確認してください。
   </div>
 </div>
 
@@ -441,6 +441,7 @@
 
   // ── TAB 1: Search ───────────────────────────────────────────────────────────
   let currentSearchUrl = '';
+  let currentSearchQuery = '';
 
   async function doSearch() {
     const q = document.getElementById('searchInput').value.trim();
@@ -448,13 +449,23 @@
     const btn = document.getElementById('searchBtn');
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
     document.getElementById('searchResult').style.display = 'none';
+    currentSearchQuery = q;
     try {
+      // MyMemory API（高品質・繁体字中国語対応）
       const res  = await fetch(
-        'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=zh-TW&dt=t&q=' + encodeURIComponent(q)
+        'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(q) + '&langpair=ja|zh-TW'
       );
       const data = await res.json();
-      const zh   = data[0].map(p => p[0]).filter(Boolean).join('');
-      const url  = 'https://shopee.tw/search?keyword=' + encodeURIComponent(zh) + '&by=relevancy&order=desc';
+      let zh = data.responseData.translatedText;
+      // フォールバック: MyMemory失敗時はGoogle利用
+      if (!zh || data.responseStatus !== 200) {
+        const res2 = await fetch(
+          'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=zh-TW&dt=t&q=' + encodeURIComponent(q)
+        );
+        const data2 = await res2.json();
+        zh = data2[0].map(p => p[0]).filter(Boolean).join('');
+      }
+      const url = 'https://shopee.tw/search?keyword=' + encodeURIComponent(zh) + '&by=relevancy&order=desc';
       document.getElementById('searchZh').textContent  = zh;
       document.getElementById('searchUrl').textContent = url;
       currentSearchUrl = url;
@@ -464,6 +475,11 @@
   }
 
   function openShopee() { if (currentSearchUrl) window.open(currentSearchUrl, '_blank'); }
+
+  function openDeepL() {
+    const q = currentSearchQuery || document.getElementById('searchInput').value.trim();
+    if (q) window.open('https://www.deepl.com/translator#ja/zh-TW/' + encodeURIComponent(q), '_blank');
+  }
 
   function copyUrl(evt) {
     if (!currentSearchUrl) return;
@@ -476,8 +492,9 @@
   }
 
   // ── Shipping state ──────────────────────────────────────────────────────────
-  let isThin  = true;
-  let carrier = 'yamato';
+  let isThin   = true;
+  let carrier  = 'yamato';
+  let nyanpay  = false;
 
   function setThin(val) {
     isThin = val;
@@ -485,8 +502,9 @@
     document.getElementById('btnThinN').classList.toggle('on', !val);
     document.getElementById('normalGroup').style.display = val ? 'none' : 'block';
     document.getElementById('thinHint').textContent = val
-      ? 'ゆうパケット等の薄型送料が適用されます'
+      ? 'クリックポスト 185円が適用されます'
       : 'ヤマト便または郵便（ゆうパック）送料が適用されます';
+    updateNyanpayVisibility();
     calcProfit();
   }
 
@@ -500,33 +518,47 @@
     document.getElementById('opt170').disabled = (c === 'yamato');
     if (c === 'yubin'  && (sel.value === '180' || sel.value === '200')) sel.value = '';
     if (c === 'yamato' && sel.value === '170') sel.value = '';
+    // ニャンペイはヤマトのみ表示
+    if (c === 'yubin') { nyanpay = false; updateNyanpayButtons(); }
+    updateNyanpayVisibility();
     calcProfit();
   }
 
+  function setNyanpay(val) {
+    nyanpay = val;
+    updateNyanpayButtons();
+    calcProfit();
+  }
+
+  function updateNyanpayButtons() {
+    document.getElementById('btnNyanY').classList.toggle('on',  nyanpay);
+    document.getElementById('btnNyanN').classList.toggle('on', !nyanpay);
+  }
+
+  function updateNyanpayVisibility() {
+    document.getElementById('nyanpayGroup').style.display =
+      (!isThin && carrier === 'yamato') ? 'block' : 'none';
+  }
+
   function getDomesticRate() {
-    if (isThin) return parseFloat(document.getElementById('thinRate').value) || 385;
+    if (isThin) return parseFloat(document.getElementById('thinRate').value) || 185;
     const size = document.getElementById('boxSize').value;
     if (!size) return null;
     const cls = carrier === 'yamato' ? '.yrate' : '.erate';
     const el  = document.querySelector(cls + '[data-s="' + size + '"]');
-    return el ? parseFloat(el.value) || 0 : null;
+    if (!el) return null;
+    let rate = parseFloat(el.value) || 0;
+    if (carrier === 'yamato' && nyanpay) rate = Math.round(rate * 0.88);
+    return rate;
   }
 
-  // SLS rate cache — rebuilt only when a srate input changes, not on every calcProfit()
-  let slsCache = [];
-
-  function buildSlsCache() {
-    slsCache = [...document.querySelectorAll('.srate')]
-      .map(el => ({ limit: parseInt(el.dataset.w), rate: parseFloat(el.value) || 0 }))
-      .sort((a, b) => a.limit - b.limit);
-  }
-
-  function onSlsChange() { buildSlsCache(); calcProfit(); }
-
-  function getSlsRate(g) {
+  // 台湾SLS送料（TWD）を重量から計算
+  // 50g刻みで切り上げ、TWD = 23.7 + rounded_g × 0.13
+  function getSlsRateTWD(g) {
     if (isNaN(g) || g <= 0) return null;
-    for (const r of slsCache) if (g <= r.limit) return r.rate;
-    return slsCache[slsCache.length - 1]?.rate ?? null;
+    if (g > 20000) return null;
+    const rounded = Math.ceil(g / 50) * 50;
+    return parseFloat((23.7 + rounded * 0.13).toFixed(1));
   }
 
   // ── Exchange rate ───────────────────────────────────────────────────────────
@@ -570,30 +602,42 @@
     const net      = salesJPY != null ? salesJPY - fee   : null;
     const hasCost  = !isNaN(cost) && cost >= 0;
 
-    const domShip  = getDomesticRate();
-    const intlShip = getSlsRate(weight);
+    const domShip     = getDomesticRate();
+    const intlShipTWD = getSlsRateTWD(weight);
+    const intlShipJPY = (intlShipTWD != null && rate > 0) ? intlShipTWD * rate : null;
 
-    const domMethodStr = isThin
-      ? '薄型 ' + (parseFloat(document.getElementById('thinRate').value) || 385) + '円'
-      : (carrier === 'yamato' ? 'ヤマト便' : '郵便') + (document.getElementById('boxSize').value ? ' ' + document.getElementById('boxSize').value + 'サイズ' : '');
-    const intlWeightStr = weight > 0 && !isNaN(weight) ? weight + 'g → SLS' : '台湾SLS';
-    document.getElementById('domLabel').textContent  = '国内送料（' + domMethodStr + '）';
+    // 国内送料ラベル
+    let domMethodStr;
+    if (isThin) {
+      domMethodStr = 'クリックポスト ' + (parseFloat(document.getElementById('thinRate').value) || 185) + '円';
+    } else {
+      const carrierName = carrier === 'yamato' ? 'ヤマト便' : '郵便';
+      const sizeStr = document.getElementById('boxSize').value ? ' ' + document.getElementById('boxSize').value + 'サイズ' : '';
+      const nyanStr = (carrier === 'yamato' && nyanpay) ? '（ニャンペイ-12%）' : '';
+      domMethodStr = carrierName + sizeStr + nyanStr;
+    }
+    document.getElementById('domLabel').textContent = '国内送料（' + domMethodStr + '）';
+
+    // 国際送料ラベル
+    const intlWeightStr = weight > 0 && !isNaN(weight)
+      ? weight + 'g → TWD' + (intlShipTWD != null ? intlShipTWD.toFixed(1) : '?')
+      : '台湾SLS';
     document.getElementById('intlLabel').textContent = '国際送料（' + intlWeightStr + '）';
 
-    setRow('rSales', salesJPY != null ? yen(salesJPY)  : '—', false);
-    setRow('rFee',   fee      != null ? myen(fee)       : '—', true);
-    setRow('rNet',   net      != null ? yen(net)        : '—', false);
-    setRow('rCost',  hasCost           ? myen(cost)     : '—', true);
-    setRow('rDom',   domShip  != null  ? myen(domShip)  : '—', true);
-    setRow('rIntl',  intlShip != null  ? myen(intlShip) : '—', true);
+    setRow('rSales', salesJPY != null ? yen(salesJPY)   : '—', false);
+    setRow('rFee',   fee      != null ? myen(fee)        : '—', true);
+    setRow('rNet',   net      != null ? yen(net)         : '—', false);
+    setRow('rCost',  hasCost           ? myen(cost)      : '—', true);
+    setRow('rDom',   domShip  != null  ? myen(domShip)   : '—', true);
+    setRow('rIntl',  intlShipJPY != null ? myen(intlShipJPY) : '—', true);
 
     const card = document.getElementById('profitCard');
     const amt  = document.getElementById('profitAmt');
     const sub  = document.getElementById('profitSub');
     card.classList.remove('pos', 'neg');
 
-    if (net != null && hasCost && domShip != null && intlShip != null) {
-      const profit = net - cost - domShip - intlShip;
+    if (net != null && hasCost && domShip != null && intlShipJPY != null) {
+      const profit = net - cost - domShip - intlShipJPY;
       card.classList.add(profit >= 0 ? 'pos' : 'neg');
       amt.textContent = (profit < 0 ? '−' : '') + yen(profit);
       const margin = salesJPY > 0 ? ((profit / salesJPY) * 100).toFixed(1) : '0.0';
@@ -624,7 +668,7 @@
 
   // ── Init ────────────────────────────────────────────────────────────────────
   document.getElementById('rateInput').value = DEFAULT_RATE.toFixed(2);
-  buildSlsCache();
+  updateNyanpayVisibility();
   fetchRate();
 </script>
 </body>
