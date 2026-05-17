@@ -592,12 +592,6 @@
   <div class="card">
     <div class="card-title">🟣 Yahoo Shopping 最安値チェック</div>
 
-    <!-- メインボタン：ブラウザで検索 -->
-    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.7;">
-      共通キーワードでYahoo Shoppingを開きます。<br>
-      <strong>安い順</strong>で表示→最安値の価格を確認→下の「手入力」欄に入力してください。
-    </div>
-
     <div class="form-group">
       <label>商品の状態</label>
       <div class="toggle-row">
@@ -607,17 +601,33 @@
       </div>
     </div>
 
-    <!-- メインボタン -->
-    <button class="btn-full search-btn-yahoo" onclick="openYahooResearch()" style="font-size:15px;padding:14px;">
-      🟣 Yahoo Shoppingで最安値を確認 ↗
-    </button>
-    <div style="font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:16px;">
-      ↑ 自動で「安い順」+選択した状態で開きます
+    <!-- クーポン入力（API結果に反映） -->
+    <div style="margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">お持ちのクーポン割引（全商品に適用）</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <input type="number" id="yahooCoupon" value="0" min="0" step="100" oninput="recalcYahooResults()"
+          style="width:100px;padding:8px;border:1.5px solid #c4b5fd;border-radius:8px;font-size:15px;text-align:right;">
+        <span style="font-size:12px;color:var(--muted);">円OFF</span>
+      </div>
     </div>
 
-    <!-- 手入力エリア -->
-    <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:14px;">
-      <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:12px;">✅ Yahooで確認した価格を入力</div>
+    <!-- 自動取得ボタン（メイン） -->
+    <button class="btn-full search-btn-yahoo" onclick="searchYahooInTool()" id="yahooAutoBtn" style="font-size:15px;padding:14px;margin-bottom:8px;">
+      🔍 最安値を自動取得（実質価格ランキング表示）
+    </button>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">↑ ツール内に最安値TOP3＋全件を実質価格（売価ーポイントークーポン）順で表示</div>
+
+    <!-- ブラウザで確認ボタン（サブ） -->
+    <button class="btn-full" onclick="openYahooResearch()" style="background:#f3f4f6;color:#374151;border:1.5px solid #d1d5db;padding:11px;font-size:13px;border-radius:10px;margin-bottom:16px;">
+      🟣 Yahoo Shoppingをブラウザで開く ↗
+    </button>
+
+    <!-- API結果表示エリア -->
+    <div id="yahooResults" style="display:none;margin-bottom:16px;"></div>
+
+    <!-- 区切り -->
+    <div style="border-top:1px dashed #e5e7eb;padding-top:14px;margin-top:4px;">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;">✏️ ブラウザで確認した場合は手動入力</div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
         <div>
@@ -629,7 +639,7 @@
           </div>
         </div>
         <div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">ポイント還元率（商品ページ確認）</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">ポイント還元率</div>
           <div style="display:flex;align-items:center;gap:4px;">
             <input type="number" id="yahooManualPoint" value="1" min="0" max="50" step="1" oninput="calcYahooEff()"
               style="width:100%;padding:8px;border:1.5px solid #86efac;border-radius:8px;font-size:15px;text-align:right;">
@@ -639,7 +649,7 @@
       </div>
 
       <div style="margin-bottom:10px;">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">クーポン割引（持っている場合のみ）</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">クーポン割引</div>
         <div style="display:flex;align-items:center;gap:4px;">
           <input type="number" id="yahooManualCoupon" value="0" min="0" step="100" oninput="calcYahooEff()"
             style="width:120px;padding:8px;border:1.5px solid #86efac;border-radius:8px;font-size:15px;text-align:right;">
@@ -647,7 +657,7 @@
         </div>
       </div>
 
-      <div id="yahooEffResult" style="display:none;background:white;border-radius:8px;padding:10px;margin-bottom:10px;">
+      <div id="yahooEffResult" style="display:none;background:#f0fdf4;border-radius:8px;padding:10px;margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
           <span style="font-size:12px;color:var(--muted);">実質仕入値（ポイント・クーポン引き後）</span>
           <span style="font-size:22px;font-weight:800;color:var(--green);" id="yahooEffPrice">¥—</span>
@@ -660,10 +670,8 @@
       </button>
     </div>
 
-    <!-- 隠しフィールド（App ID保持用） -->
+    <!-- 隠しフィールド -->
     <input type="hidden" id="yahooAppId">
-    <input type="hidden" id="yahooCoupon" value="0">
-    <div class="yahoo-results" id="yahooResults" style="display:none;"></div>
   </div>
 
   <!-- 粗利シミュレーター：Shopee台湾で販売 -->
@@ -986,13 +994,11 @@
       }
       renderYahooResults();
     } catch(e) {
-      container.innerHTML = '<div style="color:var(--red);padding:12px;font-size:13px;line-height:1.9;">'
-        + '❌ 3つの接続方法すべて失敗しました。<br>'
-        + '<strong>App IDを確認してください：</strong><br>'
-        + '① <a href="https://e.developer.yahoo.co.jp/" target="_blank" style="color:var(--shopee);">e.developer.yahoo.co.jp</a> にログイン<br>'
-        + '② アプリ一覧 → アプリ名をクリック<br>'
-        + '③ <strong>「Client ID」</strong>の文字列をコピーして上の欄に貼り付け<br>'
-        + '<br>それでも失敗する場合は「↗ ブラウザ」ボタンをご利用ください。'
+      container.innerHTML = '<div style="background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px;padding:12px;font-size:13px;line-height:1.8;color:#92400e;">'
+        + '⚠️ 自動取得できませんでした。<br>'
+        + 'ブラウザでYahoo Shoppingを開いて最安値を確認し、<br>'
+        + '下の「手動入力」欄に価格・ポイント率を入れてください。'
+        + '<br><button onclick="openYahooResearch()" style="margin-top:8px;background:#7c3aed;color:white;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;">🟣 Yahoo Shoppingを開く ↗</button>'
         + '</div>';
     }
   }
