@@ -591,6 +591,17 @@
   <!-- Yahoo Shopping 最安値チェック -->
   <div class="card">
     <div class="card-title">🟣 Yahoo Shopping 最安値（自動取得）</div>
+
+    <!-- App ID設定 -->
+    <div style="background:#f8f0ff;border:1px solid #e9d5ff;border-radius:10px;padding:10px;margin-bottom:12px;">
+      <div style="font-size:11px;font-weight:700;color:#7b00d4;margin-bottom:6px;">⚙️ Yahoo App ID（Client ID）</div>
+      <input type="text" id="yahooAppId" placeholder="Yahoo Developer ConsoleのClient IDを貼り付け"
+        style="width:100%;padding:7px 10px;border:1.5px solid #c084fc;border-radius:7px;font-size:12px;margin-bottom:4px;">
+      <div style="font-size:10px;color:var(--muted);line-height:1.6;">
+        取得方法：<strong>e.developer.yahoo.co.jp</strong> → アプリ一覧 → アプリ名クリック → <strong>「Client ID」</strong>をコピー
+      </div>
+    </div>
+
     <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">
       各商品のポイント数はAPIから自動取得。クーポンがある場合のみ下に入力してください。
     </div>
@@ -907,21 +918,42 @@
 
   function recalcYahooResults() { if (yahooHits.length) renderYahooResults(); }
 
+  async function fetchYahooData(apiUrl) {
+    // 方法1: JSONP（直接接続）
+    try { return await fetchJsonp(apiUrl, 6000); } catch(e1) { /* → プロキシへ */ }
+    // 方法2: corsproxy.io
+    try {
+      const r1 = await fetch('https://corsproxy.io/?' + encodeURIComponent(apiUrl),
+                             { signal: AbortSignal.timeout(10000) });
+      if (r1.ok) return r1.json();
+    } catch(e2) { /* → 次へ */ }
+    // 方法3: allorigins
+    const r2 = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent(apiUrl),
+                           { signal: AbortSignal.timeout(10000) });
+    if (!r2.ok) throw new Error('all_failed');
+    const j = await r2.json();
+    return j.contents ? JSON.parse(j.contents) : j;
+  }
+
   async function searchYahooInTool() {
     const keyword = document.getElementById('researchKeyword').value.trim();
     if (!keyword) { alert('上の共通キーワードを入力してください'); return; }
+
+    const appId = (document.getElementById('yahooAppId').value || '').trim() || YAHOO_APP_ID;
+
     const container = document.getElementById('yahooResults');
     container.style.display = 'block';
-    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);">Yahoo最安値を取得中... ⏳<br><span style="font-size:11px;">各商品のポイントはAPIから自動取得します</span></div>';
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);">取得中... ⏳<br><small>JSONP→CORSプロキシの順で接続を試みています</small></div>';
     yahooHits = [];
+
     let condParam = '';
     if (yahooCondition === 'new')  condParam = '&condition=new';
     if (yahooCondition === 'used') condParam = '&condition=used';
-    const url = 'https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=' + YAHOO_APP_ID
-              + '&query=' + encodeURIComponent(keyword)
-              + '&results=15&sort=' + yahooOrder + condParam;
+    const apiUrl = 'https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=' + appId
+                 + '&query=' + encodeURIComponent(keyword)
+                 + '&results=15&sort=' + yahooOrder + condParam;
     try {
-      const data = await fetchJsonp(url, 10000);
+      const data = await fetchYahooData(apiUrl);
       yahooHits  = data.hits || [];
       if (!yahooHits.length) {
         container.innerHTML = '<div style="color:var(--muted);padding:12px;text-align:center;">結果が見つかりませんでした<br><small>「↗ ブラウザ」でYahoo Shoppingを直接確認できます</small></div>';
@@ -929,11 +961,14 @@
       }
       renderYahooResults();
     } catch(e) {
-      container.innerHTML = '<div style="color:var(--red);padding:12px;font-size:13px;line-height:1.7;">'
-        + (e.message === 'timeout'
-          ? '⏱ タイムアウト：Yahoo APIが応答しませんでした。'
-          : '❌ API取得に失敗しました。App IDをご確認ください。')
-        + '<br>「↗ ブラウザ」ボタンをご利用ください。</div>';
+      container.innerHTML = '<div style="color:var(--red);padding:12px;font-size:13px;line-height:1.9;">'
+        + '❌ 3つの接続方法すべて失敗しました。<br>'
+        + '<strong>App IDを確認してください：</strong><br>'
+        + '① <a href="https://e.developer.yahoo.co.jp/" target="_blank" style="color:var(--shopee);">e.developer.yahoo.co.jp</a> にログイン<br>'
+        + '② アプリ一覧 → アプリ名をクリック<br>'
+        + '③ <strong>「Client ID」</strong>の文字列をコピーして上の欄に貼り付け<br>'
+        + '<br>それでも失敗する場合は「↗ ブラウザ」ボタンをご利用ください。'
+        + '</div>';
     }
   }
 
