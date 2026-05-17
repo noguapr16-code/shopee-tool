@@ -490,49 +490,81 @@
 <!-- ══════════ TAB 3: リサーチ ══════════ -->
 <div class="tab-content" id="tab-research">
 
-  <!-- STEP ガイド -->
+  <!-- 共通キーワード -->
   <div class="card">
-    <div class="card-title">📊 仕入れ利益リサーチ</div>
-    <div class="workflow-steps">
-      <div class="workflow-step"><div class="step-badge">1</div><div>メルカリ「売り切れ」で売れている商品を確認する</div></div>
-      <div class="workflow-step"><div class="step-badge">2</div><div>Shopee台湾で同じ商品の販売価格を確認する</div></div>
-      <div class="workflow-step"><div class="step-badge">3</div><div>Yahoo最安値をAPIで自動取得（ポイント・クーポン込み実質価格）</div></div>
-      <div class="workflow-step"><div class="step-badge">4</div><div>粗利シミュレーターで利益を即計算</div></div>
+    <div class="card-title">🔍 共通キーワード</div>
+    <div class="form-group" style="margin-bottom:0;">
+      <input type="text" id="researchKeyword" placeholder="例：ノースフェイス フリース　※全サイト連動">
     </div>
-    <div class="form-group" style="margin-bottom:8px;">
-      <label>共通キーワード（全サイト連動）</label>
-      <input type="text" id="researchKeyword" placeholder="例：ノースフェイス フリース">
+  </div>
+
+  <!-- メルカリリサーチ -->
+  <div class="card">
+    <div class="card-title">🔴 メルカリリサーチ（売れた商品）</div>
+
+    <div class="form-group">
+      <label>商品の状態（複数選択可）</label>
+      <div class="toggle-row" style="flex-wrap:wrap;gap:6px;">
+        <button class="toggle-btn on" id="mCond1" onclick="toggleMercariCond(1)">新品未使用</button>
+        <button class="toggle-btn on" id="mCond2" onclick="toggleMercariCond(2)">未使用に近い</button>
+        <button class="toggle-btn on" id="mCond3" onclick="toggleMercariCond(3)">目立った傷や汚れなし</button>
+        <button class="toggle-btn"   id="mCond4" onclick="toggleMercariCond(4)">やや傷や汚れあり</button>
+      </div>
     </div>
-    <div class="research-grid">
-      <button class="btn-full search-btn-mercari" onclick="openMercariSold()" style="font-size:13px;">🔴 メルカリ売り切れ ↗</button>
-      <button class="btn-full search-btn-shopee"  onclick="openShopeeResearch2()" style="font-size:13px;">🛒 Shopee台湾 ↗</button>
+
+    <div class="form-group">
+      <label>並び順</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="mSortNew"  onclick="setMercariSort('created_time')">新しい順</button>
+        <button class="toggle-btn"   id="mSortSold" onclick="setMercariSort('sold_desc')">売れた順</button>
+      </div>
     </div>
+
+    <button class="btn-full search-btn-mercari" onclick="openMercariSold()" style="margin-top:4px;">
+      🔴 売り切れ商品を検索 ↗
+    </button>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px;">※ 「売り切れ」フィルター＋選択した状態で実際に売れた商品が表示されます</div>
+  </div>
+
+  <!-- Shopee台湾リサーチ -->
+  <div class="card">
+    <div class="card-title">🛒 Shopee台湾リサーチ</div>
+
+    <div class="form-group">
+      <label>日本セラーのみ</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="shopeeJpY" onclick="setShopeeJapan(true)">日本発送のみ</button>
+        <button class="toggle-btn"   id="shopeeJpN" onclick="setShopeeJapan(false)">すべての国</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>並び順</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="shopeeSortSales" onclick="setShopeeSort('sales')">売上順</button>
+        <button class="toggle-btn"   id="shopeeSortNew"   onclick="setShopeeSort('ctime')">新着順</button>
+        <button class="toggle-btn"   id="shopeeSortPrice" onclick="setShopeeSort('price')">価格順</button>
+      </div>
+    </div>
+
+    <button class="btn-full search-btn-shopee" onclick="openShopeeResearch2()" style="margin-top:4px;" id="shopeeSearchBtn">
+      🛒 Shopee台湾を検索 ↗（日本語→中国語に自動変換）
+    </button>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px;">※ キーワードを自動で繁体字（中国語）に変換してから検索します</div>
   </div>
 
   <!-- Yahoo Shopping 最安値チェック -->
   <div class="card">
     <div class="card-title">🟣 Yahoo Shopping 最安値（自動取得）</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">
+      各商品のポイント数はAPIから自動取得。クーポンがある場合のみ下に入力してください。
+    </div>
 
-    <!-- ポイント・クーポン設定 -->
-    <div style="background:#f8f0ff;border:1px solid #e9d5ff;border-radius:10px;padding:12px;margin-bottom:14px;">
-      <div style="font-size:12px;font-weight:700;color:#7b00d4;margin-bottom:10px;">💎 実質仕入値の計算条件</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">ポイント還元率</div>
-          <div style="display:flex;align-items:center;gap:4px;">
-            <input type="number" id="yahooPointRate" value="1" min="0" max="50" step="0.5" oninput="recalcYahooResults()" style="width:72px;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;text-align:right;">
-            <span style="font-size:12px;color:var(--muted);">%</span>
-          </div>
-          <div style="font-size:10px;color:var(--muted);margin-top:3px;">通常1%、キャンペーン時は変更</div>
-        </div>
-        <div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">クーポン割引額</div>
-          <div style="display:flex;align-items:center;gap:4px;">
-            <input type="number" id="yahooCoupon" value="0" min="0" step="100" oninput="recalcYahooResults()" style="width:72px;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;text-align:right;">
-            <span style="font-size:12px;color:var(--muted);">円</span>
-          </div>
-          <div style="font-size:10px;color:var(--muted);margin-top:3px;">クーポンがある場合に入力</div>
-        </div>
+    <div class="form-group">
+      <label>クーポン割引額（持っている場合のみ）</label>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <input type="number" id="yahooCoupon" value="0" min="0" step="100" oninput="recalcYahooResults()"
+          style="width:100px;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;text-align:right;">
+        <span style="font-size:13px;color:var(--muted);">円　（例：500円OFFクーポン→500と入力）</span>
       </div>
     </div>
 
@@ -559,26 +591,23 @@
       </button>
       <button class="btn-full" onclick="openYahooResearch()" style="flex:1;background:#f3f4f6;color:var(--text);font-size:13px;">↗ ブラウザ</button>
     </div>
-
     <div class="yahoo-results" id="yahooResults"></div>
   </div>
 
-  <!-- 粗利シミュレーター -->
+  <!-- 粗利シミュレーター：Shopee台湾で販売 -->
   <div class="card" id="simCard">
-    <div class="card-title">💴 粗利シミュレーター</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
-      Yahoo最安値ボタン or 手入力で仕入値を設定。<br>Shopee台湾で確認した販売価格を入力してください。
-    </div>
+    <div class="card-title">🛒 粗利計算：Shopee台湾で販売する場合</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Yahoo最安値の「📊 使う」ボタン→仕入値が自動入力されます</div>
 
     <div class="form-group">
-      <label>実質仕入値 <span style="font-weight:400;font-size:11px;color:var(--muted)">（ポイント・クーポン引き後）</span></label>
+      <label>実質仕入値 <span style="font-size:11px;font-weight:400;color:var(--muted)">（ポイント・クーポン引き後）</span></label>
       <div class="input-with-unit">
         <input type="number" id="simCost" placeholder="例：2800" oninput="calcSimProfit()">
         <span class="unit">円</span>
       </div>
     </div>
     <div class="form-group">
-      <label>Shopee台湾 販売価格 <span style="font-weight:400;font-size:11px;color:var(--muted)">（Shopeeで確認した相場）</span></label>
+      <label>Shopee台湾 販売価格 <span style="font-size:11px;font-weight:400;color:var(--muted)">（Shopeeで確認した相場）</span></label>
       <div class="input-with-unit">
         <input type="number" id="simSellTwd" placeholder="例：850" oninput="calcSimProfit()">
         <span class="unit">TWD</span>
@@ -586,30 +615,86 @@
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
       <div class="form-group" style="margin-bottom:0;">
-        <label>想定重量</label>
+        <label>商品重量</label>
         <div class="input-with-unit">
           <input type="number" id="simWeight" value="500" min="50" max="20000" step="50" oninput="calcSimProfit()">
           <span class="unit">g</span>
         </div>
       </div>
       <div class="form-group" style="margin-bottom:0;">
-        <label>国内送料</label>
+        <label>国内送料（Yahoo→自宅）</label>
         <div class="input-with-unit">
           <input type="number" id="simDomShip" value="0" min="0" step="10" oninput="calcSimProfit()">
           <span class="unit">円</span>
         </div>
       </div>
     </div>
-
     <div class="sim-result" id="simResult"></div>
-
     <button class="btn-full" onclick="sendSimToCalcTab()" id="simSendBtn" style="display:none;margin-top:10px;background:#f3f4f6;color:var(--text);font-size:13px;">
       📊 利益計算タブで詳細確認
     </button>
   </div>
 
+  <!-- 粗利シミュレーター：メルカリで販売 -->
+  <div class="card" id="merSimCard">
+    <div class="card-title">🔴 粗利計算：メルカリで販売する場合</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">仕入れた商品をメルカリで売る場合の利益計算。手数料10%固定。</div>
+
+    <div class="form-group">
+      <label>実質仕入値 <span style="font-size:11px;font-weight:400;color:var(--muted)">（Yahoo最安値ポイント引き後）</span></label>
+      <div class="input-with-unit">
+        <input type="number" id="merCost" placeholder="例：2800" oninput="calcMerProfit()">
+        <span class="unit">円</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>メルカリ販売価格 <span style="font-size:11px;font-weight:400;color:var(--muted)">（メルカリで確認した相場）</span></label>
+      <div class="input-with-unit">
+        <input type="number" id="merSellPrice" placeholder="例：4500" oninput="calcMerProfit()">
+        <span class="unit">円</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>配送方法</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="merCarrierRaku" onclick="setMerCarrier('rakuraku')">らくらくメルカリ便（ヤマト）</button>
+        <button class="toggle-btn"   id="merCarrierYuu"  onclick="setMerCarrier('yuuyu')">ゆうゆうメルカリ便（日本郵便）</button>
+      </div>
+    </div>
+
+    <!-- らくらくメルカリ便サイズ -->
+    <div class="form-group" id="merSizeRakuGroup">
+      <label>サイズ</label>
+      <div class="toggle-row" style="flex-wrap:wrap;gap:6px;">
+        <button class="toggle-btn on" id="merSizeR1" onclick="setMerSize('r1',210)">ネコポス 210円</button>
+        <button class="toggle-btn"   id="merSizeR2" onclick="setMerSize('r2',450)">コンパクト 450円</button>
+        <button class="toggle-btn"   id="merSizeR3" onclick="setMerSize('r3',750)">60サイズ 750円</button>
+        <button class="toggle-btn"   id="merSizeR4" onclick="setMerSize('r4',930)">80サイズ 930円</button>
+        <button class="toggle-btn"   id="merSizeR5" onclick="setMerSize('r5',1150)">100サイズ 1,150円</button>
+        <button class="toggle-btn"   id="merSizeR6" onclick="setMerSize('r6',1350)">120サイズ 1,350円</button>
+        <button class="toggle-btn"   id="merSizeR7" onclick="setMerSize('r7',1550)">140サイズ 1,550円</button>
+        <button class="toggle-btn"   id="merSizeR8" onclick="setMerSize('r8',1750)">160サイズ 1,750円</button>
+      </div>
+    </div>
+
+    <!-- ゆうゆうメルカリ便サイズ -->
+    <div class="form-group" id="merSizeYuuGroup" style="display:none;">
+      <label>サイズ</label>
+      <div class="toggle-row" style="flex-wrap:wrap;gap:6px;">
+        <button class="toggle-btn on" id="merSizeY1" onclick="setMerSize('y1',230)">ゆうパケット 230円</button>
+        <button class="toggle-btn"   id="merSizeY2" onclick="setMerSize('y2',215)">ゆうパケットポスト 215円</button>
+        <button class="toggle-btn"   id="merSizeY3" onclick="setMerSize('y3',770)">ゆうパック 60 770円</button>
+        <button class="toggle-btn"   id="merSizeY4" onclick="setMerSize('y4',1070)">ゆうパック 80 1,070円</button>
+        <button class="toggle-btn"   id="merSizeY5" onclick="setMerSize('y5',1370)">ゆうパック 100 1,370円</button>
+      </div>
+    </div>
+
+    <div class="sim-result" id="merSimResult"></div>
+  </div>
+
   <div style="text-align:center;font-size:11px;color:#c0c0c0;padding:4px 0 28px;">
-    ※ Mercariはブラウザで確認、Shopee TW価格は手入力が必要です（API非公開のため）
+    ※ メルカリ・Shopee TWの相場価格は各サイトで手動確認が必要です（公開APIなし）
   </div>
 </div>
 
@@ -680,13 +765,11 @@
 
   function fetchJsonp(url, timeoutMs) {
     return new Promise((resolve, reject) => {
-      const cb = 'yj_' + Date.now();
-      const s  = document.createElement('script');
-      const timer = setTimeout(() => {
-        delete window[cb]; s.remove(); reject(new Error('timeout'));
-      }, timeoutMs || 10000);
-      window[cb] = (d) => { clearTimeout(timer); delete window[cb]; s.remove(); resolve(d); };
-      s.onerror  = ()  => { clearTimeout(timer); delete window[cb]; s.remove(); reject(new Error('failed')); };
+      const cb    = 'yj_' + Date.now();
+      const s     = document.createElement('script');
+      const timer = setTimeout(() => { delete window[cb]; s.remove(); reject(new Error('timeout')); }, timeoutMs || 10000);
+      window[cb]  = (d) => { clearTimeout(timer); delete window[cb]; s.remove(); resolve(d); };
+      s.onerror   = ()  => { clearTimeout(timer); delete window[cb]; s.remove(); reject(new Error('failed')); };
       s.src = url + '&callback=' + cb;
       document.head.appendChild(s);
     });
@@ -695,8 +778,8 @@
   function setYahooOrder(v) {
     yahooOrder = v;
     ['Price','Sold','New'].forEach(k => document.getElementById('yahooOrder'+k).classList.remove('on'));
-    const map = { 'priceatoz':'Price', '-sold':'Sold', 'newold':'New' };
-    document.getElementById('yahooOrder' + map[v]).classList.add('on');
+    ({ 'priceatoz':'Price', '-sold':'Sold', 'newold':'New' })[v] &&
+      document.getElementById('yahooOrder' + ({ 'priceatoz':'Price', '-sold':'Sold', 'newold':'New' })[v]).classList.add('on');
   }
 
   function setYahooCondition(v) {
@@ -707,65 +790,55 @@
   }
 
   function renderYahooResults() {
-    const container   = document.getElementById('yahooResults');
+    const container = document.getElementById('yahooResults');
     if (!yahooHits.length) return;
-    const jpyPerTwd   = parseFloat(document.getElementById('rateInput').value) || 4.5;
-    const pointRate   = parseFloat(document.getElementById('yahooPointRate').value) || 1;
-    const coupon      = parseFloat(document.getElementById('yahooCoupon').value) || 0;
+    const coupon = parseFloat(document.getElementById('yahooCoupon').value) || 0;
 
     container.innerHTML = yahooHits.map(item => {
-      const name      = (item.name || '').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-      const listPrice = item.price || 0;
-      const img       = (item.image && item.image.small) ? item.image.small : '';
-      const store     = (item.seller && item.seller.name) ? item.seller.name : '';
-      const itemUrl   = (item.url || '#').replace(/'/g, '%27');
-      const apiPoint  = (item.point && item.point.premiumRate) ? item.point.premiumRate : pointRate;
-      const pointAmt  = Math.round(listPrice * apiPoint / 100);
-      const effCost   = Math.max(0, listPrice - pointAmt - coupon);
+      const name     = (item.name || '').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+      const price    = item.price || 0;
+      const img      = (item.image && item.image.small) ? item.image.small : '';
+      const store    = (item.seller && item.seller.name) ? item.seller.name : '';
+      const itemUrl  = (item.url || '#').replace(/'/g, '%27');
+      // ポイントはAPIから自動取得
+      const ptRate   = (item.point && item.point.premiumRate)  ? item.point.premiumRate  : 1;
+      const ptAmt    = (item.point && item.point.premiumAmount) ? item.point.premiumAmount : Math.round(price * ptRate / 100);
+      const effCost  = Math.max(0, price - ptAmt - coupon);
 
       return '<div class="yahoo-item">'
         + '<div class="yahoo-item-row">'
-        + (img
-          ? '<img src="' + img + '" alt="" onerror="this.style.display=\'none\'" onclick="window.open(\'' + itemUrl + '\',\'_blank\')">'
-          : '<div class="yahoo-item-thumb" onclick="window.open(\'' + itemUrl + '\',\'_blank\')"></div>')
+        + (img ? '<img src="' + img + '" alt="" onerror="this.style.display=\'none\'" onclick="window.open(\'' + itemUrl + '\',\'_blank\')">'
+               : '<div class="yahoo-item-thumb" onclick="window.open(\'' + itemUrl + '\',\'_blank\')"></div>')
         + '<div class="yahoo-item-body">'
         + '<div class="yahoo-item-name" onclick="window.open(\'' + itemUrl + '\',\'_blank\')">' + name + '</div>'
         + '<div class="yahoo-price-row">'
-        + '<span class="yahoo-buy-price">¥' + listPrice.toLocaleString() + '</span>'
-        + '<span class="yahoo-point-badge">P' + apiPoint + '% -¥' + pointAmt.toLocaleString() + '</span>'
-        + (coupon > 0 ? '<span class="yahoo-point-badge" style="background:#d1fae5;color:#065f46;">クーポン -¥' + coupon.toLocaleString() + '</span>' : '')
+        + '<span class="yahoo-buy-price">¥' + price.toLocaleString() + '</span>'
+        + '<span class="yahoo-point-badge">P' + ptRate + '% ー¥' + ptAmt.toLocaleString() + '（API自動取得）</span>'
+        + (coupon > 0 ? '<span class="yahoo-point-badge" style="background:#d1fae5;color:#065f46;">クーポン ー¥' + coupon.toLocaleString() + '</span>' : '')
         + '</div>'
-        + '<div class="yahoo-eff-row">'
-        + '<span class="yahoo-eff-label">実質仕入値：</span>'
-        + '<span class="yahoo-eff-price">¥' + effCost.toLocaleString() + '</span>'
-        + '</div>'
+        + '<div class="yahoo-eff-row"><span class="yahoo-eff-label">実質仕入値：</span>'
+        + '<span class="yahoo-eff-price">¥' + effCost.toLocaleString() + '</span></div>'
         + '<div class="yahoo-store">' + store + '</div>'
         + '<div class="yahoo-actions">'
-        + '<button class="yahoo-use-btn" onclick="useYahooPrice(' + effCost + ')">📊 粗利シミュレーターに使う</button>'
+        + '<button class="yahoo-use-btn" onclick="useYahooPrice(' + effCost + ')">📊 粗利計算に使う</button>'
         + '<button class="yahoo-open-btn" onclick="window.open(\'' + itemUrl + '\',\'_blank\')">↗</button>'
         + '</div>'
-        + '</div></div>'
-        + '</div>';
+        + '</div></div></div>';
     }).join('');
   }
 
-  function recalcYahooResults() {
-    if (yahooHits.length) renderYahooResults();
-  }
+  function recalcYahooResults() { if (yahooHits.length) renderYahooResults(); }
 
   async function searchYahooInTool() {
     const keyword = document.getElementById('researchKeyword').value.trim();
-    if (!keyword) { alert('キーワードを入力してください'); return; }
-
+    if (!keyword) { alert('上の共通キーワードを入力してください'); return; }
     const container = document.getElementById('yahooResults');
     container.style.display = 'block';
-    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);">Yahoo最安値を取得中... ⏳</div>';
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);">Yahoo最安値を取得中... ⏳<br><span style="font-size:11px;">各商品のポイントはAPIから自動取得します</span></div>';
     yahooHits = [];
-
     let condParam = '';
     if (yahooCondition === 'new')  condParam = '&condition=new';
     if (yahooCondition === 'used') condParam = '&condition=used';
-
     const url = 'https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=' + YAHOO_APP_ID
               + '&query=' + encodeURIComponent(keyword)
               + '&results=15&sort=' + yahooOrder + condParam;
@@ -773,25 +846,28 @@
       const data = await fetchJsonp(url, 10000);
       yahooHits  = data.hits || [];
       if (!yahooHits.length) {
-        container.innerHTML = '<div style="color:var(--muted);padding:12px;text-align:center;">結果が見つかりませんでした<br><span style="font-size:11px;">「↗ ブラウザ」でYahoo Shoppingを直接確認できます</span></div>';
+        container.innerHTML = '<div style="color:var(--muted);padding:12px;text-align:center;">結果が見つかりませんでした<br><small>「↗ ブラウザ」でYahoo Shoppingを直接確認できます</small></div>';
         return;
       }
       renderYahooResults();
     } catch(e) {
-      const msg = e.message === 'timeout'
-        ? '⏱ タイムアウト：Yahoo APIが応答しませんでした。<br>「↗ ブラウザ」ボタンをご利用ください。'
-        : '❌ API取得に失敗しました。App IDが正しいか確認するか、「↗ ブラウザ」ボタンをご利用ください。';
-      container.innerHTML = '<div style="color:var(--red);padding:12px;font-size:13px;line-height:1.7;">' + msg + '</div>';
+      container.innerHTML = '<div style="color:var(--red);padding:12px;font-size:13px;line-height:1.7;">'
+        + (e.message === 'timeout'
+          ? '⏱ タイムアウト：Yahoo APIが応答しませんでした。'
+          : '❌ API取得に失敗しました。App IDをご確認ください。')
+        + '<br>「↗ ブラウザ」ボタンをご利用ください。</div>';
     }
   }
 
   function useYahooPrice(effCost) {
-    document.getElementById('simCost').value = effCost;
+    document.getElementById('simCost').value  = effCost;
+    document.getElementById('merCost').value  = effCost;
     calcSimProfit();
+    calcMerProfit();
     document.getElementById('simCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  // ── 粗利シミュレーター ──────────────────────────────────────────────────────
+  // ── 粗利シミュレーター：Shopee台湾 ──────────────────────────────────────────
   function calcSimProfit() {
     const cost      = parseFloat(document.getElementById('simCost').value);
     const sellTwd   = parseFloat(document.getElementById('simSellTwd').value);
@@ -800,44 +876,31 @@
     const jpyPerTwd = parseFloat(document.getElementById('rateInput').value) || 4.5;
     const result    = document.getElementById('simResult');
     const sendBtn   = document.getElementById('simSendBtn');
-
-    if (isNaN(cost) || isNaN(sellTwd) || sellTwd <= 0) {
-      result.style.display = 'none';
-      sendBtn.style.display = 'none';
-      return;
-    }
-
-    const slsTwd        = getSlsRateTWD(weight) || 89.7;
-    const slsJpy        = slsTwd * jpyPerTwd;
-    const commissionTwd = sellTwd * 0.10;
-    const netSellTwd    = sellTwd * 0.90;
-    const revenueJpy    = netSellTwd * jpyPerTwd;
-    const totalCostJpy  = cost + domShip + slsJpy;
-    const profit        = Math.round(revenueJpy - totalCostJpy);
-    const marginPct     = sellTwd > 0
-      ? Math.round(profit / (sellTwd * jpyPerTwd) * 100) : 0;
-    const isProfit      = profit >= 0;
-
-    result.className  = 'sim-result ' + (isProfit ? 'profit' : 'loss');
+    if (isNaN(cost) || isNaN(sellTwd) || sellTwd <= 0) { result.style.display='none'; sendBtn.style.display='none'; return; }
+    const slsTwd       = getSlsRateTWD(weight) || 89.7;
+    const slsJpy       = slsTwd * jpyPerTwd;
+    const commTwd      = sellTwd * 0.10;
+    const netTwd       = sellTwd * 0.90;
+    const revenueJpy   = netTwd * jpyPerTwd;
+    const totalCostJpy = cost + domShip + slsJpy;
+    const profit       = Math.round(revenueJpy - totalCostJpy);
+    const marginPct    = Math.round(profit / (sellTwd * jpyPerTwd) * 100);
+    result.className   = 'sim-result ' + (profit >= 0 ? 'profit' : 'loss');
     result.style.display = 'block';
     sendBtn.style.display = 'block';
-
     result.innerHTML =
-      row('Shopee販売価格', sellTwd.toLocaleString() + ' TWD', '') +
-      row('Shopee手数料 (10%)', '－' + commissionTwd.toFixed(0) + ' TWD', 'minus') +
-      row('Shopee手取り', netSellTwd.toFixed(0) + ' TWD → ¥' + Math.round(revenueJpy).toLocaleString(), '') +
+      row('Shopee台湾 販売価格', sellTwd.toLocaleString() + ' TWD', '') +
+      row('Shopee手数料 (10%)', 'ー' + commTwd.toFixed(0) + ' TWD', 'minus') +
+      row('手取り（台湾売上）', netTwd.toFixed(0) + ' TWD → ¥' + Math.round(revenueJpy).toLocaleString(), '') +
       '<hr class="sim-divider">' +
-      row('実質仕入値', '－¥' + cost.toLocaleString(), 'minus') +
-      (domShip > 0 ? row('国内送料', '－¥' + domShip.toLocaleString(), 'minus') : '') +
-      row('SLS国際送料 (' + weight + 'g)', '－' + slsTwd.toFixed(1) + ' TWD (¥' + Math.round(slsJpy).toLocaleString() + ')', 'minus') +
+      row('実質仕入値', 'ー¥' + cost.toLocaleString(), 'minus') +
+      (domShip > 0 ? row('国内送料', 'ー¥' + domShip.toLocaleString(), 'minus') : '') +
+      row('SLS国際送料 (' + weight + 'g)', 'ー' + slsTwd.toFixed(1) + ' TWD (¥' + Math.round(slsJpy).toLocaleString() + ')', 'minus') +
       '<hr class="sim-divider">' +
-      '<div class="sim-profit-row">' +
-        '<span class="sim-profit-label">粗利</span>' +
-        '<span class="sim-profit-val ' + (isProfit ? 'good' : 'bad') + '">' +
-          (isProfit ? '＋' : '－') + '¥' + Math.abs(profit).toLocaleString() +
-        '</span>' +
-      '</div>' +
-      '<div class="sim-margin">利益率 ' + marginPct + '%</div>';
+      '<div class="sim-profit-row"><span class="sim-profit-label">粗利</span>'
+        + '<span class="sim-profit-val ' + (profit >= 0 ? 'good' : 'bad') + '">'
+        + (profit >= 0 ? '＋' : '－') + '¥' + Math.abs(profit).toLocaleString() + '</span></div>'
+      + '<div class="sim-margin">利益率 ' + marginPct + '%</div>';
   }
 
   function row(label, val, cls) {
@@ -846,31 +909,132 @@
   }
 
   function sendSimToCalcTab() {
-    const cost    = document.getElementById('simCost').value;
-    const sell    = document.getElementById('simSellTwd').value;
-    if (cost)  document.getElementById('costPrice').value = cost;
-    if (sell)  document.getElementById('sellPrice').value = sell;
-    switchTab('calc');
-    calcProfit();
+    const cost = document.getElementById('simCost').value;
+    const sell = document.getElementById('simSellTwd').value;
+    if (cost) document.getElementById('costPrice').value = cost;
+    if (sell) document.getElementById('sellPrice').value = sell;
+    switchTab('calc'); calcProfit();
+  }
+
+  // ── 粗利シミュレーター：メルカリ ─────────────────────────────────────────────
+  let merCarrier   = 'rakuraku';
+  let merShipCost  = 210;
+
+  function setMerCarrier(v) {
+    merCarrier = v;
+    document.getElementById('merCarrierRaku').classList.toggle('on', v === 'rakuraku');
+    document.getElementById('merCarrierYuu').classList.toggle('on',  v === 'yuuyu');
+    document.getElementById('merSizeRakuGroup').style.display = v === 'rakuraku' ? 'block' : 'none';
+    document.getElementById('merSizeYuuGroup').style.display  = v === 'yuuyu'    ? 'block' : 'none';
+    // デフォルトサイズを先頭に
+    if (v === 'rakuraku') { merShipCost = 210; setMerSizeActive('r1'); }
+    else                  { merShipCost = 230; setMerSizeActive('y1'); }
+    calcMerProfit();
+  }
+
+  function setMerSizeActive(id) {
+    ['r1','r2','r3','r4','r5','r6','r7','r8','y1','y2','y3','y4','y5'].forEach(k => {
+      const el = document.getElementById('merSize' + k.charAt(0).toUpperCase() + k.slice(1));
+      if (el) el.classList.remove('on');
+    });
+    const active = document.getElementById('merSize' + id.charAt(0).toUpperCase() + id.slice(1));
+    if (active) active.classList.add('on');
+  }
+
+  function setMerSize(id, cost) {
+    merShipCost = cost;
+    setMerSizeActive(id);
+    calcMerProfit();
+  }
+
+  function calcMerProfit() {
+    const cost      = parseFloat(document.getElementById('merCost').value);
+    const sellPrice = parseFloat(document.getElementById('merSellPrice').value);
+    const result    = document.getElementById('merSimResult');
+    if (isNaN(cost) || isNaN(sellPrice) || sellPrice <= 0) { result.style.display='none'; return; }
+    const commission = Math.round(sellPrice * 0.10);
+    const netRevenue = sellPrice - commission;
+    const profit     = Math.round(netRevenue - merShipCost - cost);
+    const marginPct  = Math.round(profit / sellPrice * 100);
+    result.className = 'sim-result ' + (profit >= 0 ? 'profit' : 'loss');
+    result.style.display = 'block';
+    result.innerHTML =
+      row('メルカリ販売価格', '¥' + sellPrice.toLocaleString(), '') +
+      row('手数料 (10%)', 'ー¥' + commission.toLocaleString(), 'minus') +
+      row('配送費', 'ー¥' + merShipCost.toLocaleString(), 'minus') +
+      row('実質仕入値', 'ー¥' + cost.toLocaleString(), 'minus') +
+      '<hr class="sim-divider">' +
+      '<div class="sim-profit-row"><span class="sim-profit-label">粗利</span>'
+        + '<span class="sim-profit-val ' + (profit >= 0 ? 'good' : 'bad') + '">'
+        + (profit >= 0 ? '＋' : '－') + '¥' + Math.abs(profit).toLocaleString() + '</span></div>'
+      + '<div class="sim-margin">利益率 ' + marginPct + '%</div>';
   }
 
   // ── ブラウザ起動（リサーチ用） ──────────────────────────────────────────────
+  let mercariConds = new Set([1, 2, 3]);
+  let mercariSort  = 'created_time';
+  let shopeeJapanOnly  = true;
+  let shopeeSortOrder  = 'sales';
+
   function getResearchKeyword() {
     return document.getElementById('researchKeyword').value.trim();
+  }
+
+  function toggleMercariCond(id) {
+    if (mercariConds.has(id)) {
+      if (mercariConds.size > 1) mercariConds.delete(id);
+    } else {
+      mercariConds.add(id);
+    }
+    document.getElementById('mCond' + id).classList.toggle('on', mercariConds.has(id));
+  }
+
+  function setMercariSort(v) {
+    mercariSort = v;
+    document.getElementById('mSortNew').classList.toggle('on',  v === 'created_time');
+    document.getElementById('mSortSold').classList.toggle('on', v === 'sold_desc');
   }
 
   function openMercariSold() {
     const kw = getResearchKeyword();
     if (!kw) { alert('キーワードを入力してください'); return; }
+    const condIds = [...mercariConds].sort().join(',');
     window.open('https://jp.mercari.com/search?keyword=' + encodeURIComponent(kw)
-      + '&status=sold_out&sort=sold_desc', '_blank');
+      + '&status=sold_out&sort=' + mercariSort
+      + (condIds ? '&item_condition_id=' + condIds : ''), '_blank');
   }
 
-  function openShopeeResearch2() {
+  function setShopeeJapan(v) {
+    shopeeJapanOnly = v;
+    document.getElementById('shopeeJpY').classList.toggle('on',  v);
+    document.getElementById('shopeeJpN').classList.toggle('on', !v);
+  }
+
+  function setShopeeSort(v) {
+    shopeeSortOrder = v;
+    ['Sales','New','Price'].forEach(k => document.getElementById('shopeeSort'+k).classList.remove('on'));
+    const map = { 'sales':'Sales', 'ctime':'New', 'price':'Price' };
+    if (map[v]) document.getElementById('shopeeSort' + map[v]).classList.add('on');
+  }
+
+  async function openShopeeResearch2() {
     const kw = getResearchKeyword();
     if (!kw) { alert('キーワードを入力してください'); return; }
-    window.open('https://shopee.tw/search?keyword=' + encodeURIComponent(kw)
-      + '&by=sales&order=desc&locations=JP', '_blank');
+    const btn = document.getElementById('shopeeSearchBtn');
+    btn.textContent = '翻訳中...';
+    btn.disabled = true;
+    let zhKw = kw;
+    try {
+      const res  = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(kw) + '&langpair=ja|zh-TW');
+      const data = await res.json();
+      if (data.responseStatus === 200 && data.responseData.translatedText) zhKw = data.responseData.translatedText;
+    } catch { /* 翻訳失敗時は元のキーワードを使用 */ }
+    btn.textContent = '🛒 Shopee台湾を検索 ↗（日本語→中国語に自動変換）';
+    btn.disabled = false;
+    let url = 'https://shopee.tw/search?keyword=' + encodeURIComponent(zhKw)
+            + '&by=' + shopeeSortOrder + '&order=desc';
+    if (shopeeJapanOnly) url += '&locations=JP';
+    window.open(url, '_blank');
   }
 
   function openYahooResearch() {
