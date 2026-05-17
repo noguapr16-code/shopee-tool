@@ -19,7 +19,6 @@
       background: var(--bg); color: var(--text);
     }
 
-    /* ── Header / Tabs ── */
     .header {
       background: linear-gradient(135deg, var(--shopee), var(--shopee2));
       color: white; padding: 14px 16px 0;
@@ -27,22 +26,20 @@
       box-shadow: 0 2px 8px rgba(238,77,45,.3);
     }
     .header h1 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
-    .tabs { display: flex; gap: 4px; }
+    .tabs { display: flex; gap: 3px; }
     .tab {
-      flex: 1; padding: 10px 8px;
+      flex: 1; padding: 9px 4px;
       background: rgba(255,255,255,.15); border: none;
       border-radius: 10px 10px 0 0;
       color: rgba(255,255,255,.7);
-      font-size: 13px; font-weight: 600; cursor: pointer;
+      font-size: 11px; font-weight: 600; cursor: pointer;
       transition: all .15s; font-family: inherit;
     }
     .tab.active { background: var(--bg); color: var(--shopee); }
 
-    /* ── Content ── */
     .tab-content { display: none; padding: 12px; }
     .tab-content.active { display: block; }
 
-    /* ── Card ── */
     .card {
       background: var(--card); border-radius: 14px;
       padding: 18px 16px; margin-bottom: 12px;
@@ -54,7 +51,6 @@
       border-bottom: 2px solid var(--shopee-light);
     }
 
-    /* ── Form ── */
     .form-group { margin-bottom: 12px; }
     .form-group:last-child { margin-bottom: 0; }
     label {
@@ -83,7 +79,6 @@
       font-size: 13px; color: var(--muted); pointer-events: none;
     }
 
-    /* ── Toggle buttons ── */
     .toggle-row { display: flex; gap: 8px; }
     .toggle-btn {
       flex: 1; padding: 10px 6px;
@@ -98,7 +93,6 @@
     }
     .hint { font-size: 11px; color: var(--muted); margin-top: 5px; }
 
-    /* ── Buttons ── */
     .btn {
       padding: 11px 18px; border-radius: 10px; border: none;
       font-size: 15px; font-weight: 700; cursor: pointer;
@@ -116,7 +110,6 @@
     }
     .btn-full:active { opacity: .85; }
 
-    /* ── Search tab ── */
     .translation-result {
       background: #eff6ff; border: 1px solid #bfdbfe;
       border-radius: 10px; padding: 12px 14px; margin-top: 10px;
@@ -124,11 +117,10 @@
     .translation-result .t-label { font-size: 11px; color: #3b82f6; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
     .translation-result .zh { font-size: 22px; font-weight: 700; color: #1d4ed8; }
     .translation-result .url-text { font-size: 11px; color: #6b7280; margin-top: 6px; word-break: break-all; }
-    .open-btn { background: linear-gradient(135deg, var(--shopee), var(--shopee2)); color: white; margin-top: 12px; }
-    .copy-btn { background: #f3f4f6; color: var(--text); margin-top: 8px; font-size: 14px; }
+    .open-btn  { background: linear-gradient(135deg, var(--shopee), var(--shopee2)); color: white; margin-top: 12px; }
+    .copy-btn  { background: #f3f4f6; color: var(--text); margin-top: 8px; font-size: 14px; }
     .deepl-btn { background: #042b48; color: white; margin-top: 8px; font-size: 14px; }
 
-    /* ── Rate banner ── */
     .rate-banner {
       display: flex; align-items: center; justify-content: center;
       gap: 8px; flex-wrap: wrap;
@@ -147,7 +139,6 @@
     @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.35} }
     .refresh-link { background: none; border: none; cursor: pointer; font-size: 12px; color: #2563eb; text-decoration: underline; padding: 0; }
 
-    /* ── Profit card ── */
     .profit-card {
       border-radius: 16px; padding: 22px 20px;
       text-align: center; color: white; margin-bottom: 12px;
@@ -160,7 +151,6 @@
     .profit-amount { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
     .profit-sub    { font-size: 13px; opacity: .8; }
 
-    /* ── Result rows ── */
     .result-row {
       display: flex; justify-content: space-between; align-items: center;
       padding: 9px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px;
@@ -171,7 +161,6 @@
     .result-val.minus { color: var(--red); }
     .result-val.plus  { color: var(--green); }
 
-    /* ── Settings ── */
     .settings-btn {
       width: 100%; background: none; border: 1.5px solid var(--border);
       border-radius: 10px; padding: 11px 14px; font-size: 13px;
@@ -203,7 +192,36 @@
     .rate-tbl input { width: 88px; padding: 5px 8px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 13px; text-align: right; outline: none; font-family: inherit; }
     .rate-tbl input:focus { border-color: var(--shopee); }
 
-    /* ── Spinner ── */
+    /* ── リサーチタブ専用 ── */
+    .research-section {
+      margin-bottom: 20px;
+    }
+    .research-section-title {
+      font-size: 14px; font-weight: 700; color: var(--text);
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .search-btn-shopee {
+      background: linear-gradient(135deg, var(--shopee), var(--shopee2));
+      color: white;
+    }
+    .search-btn-yahoo {
+      background: linear-gradient(135deg, #7b00d4, #5f00a8);
+      color: white;
+    }
+    .search-btn-mercari {
+      background: linear-gradient(135deg, #ff0211, #cc0000);
+      color: white;
+    }
+    .tag-row {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+    }
+    .tag {
+      padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      background: var(--shopee-light); color: var(--shopee); cursor: pointer;
+      border: 1px solid #ffd4c8; transition: all .15s;
+    }
+    .tag:active { background: var(--shopee); color: white; }
+
     .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
@@ -214,8 +232,9 @@
 <div class="header">
   <h1>🛒 Shopee Taiwan ツール</h1>
   <div class="tabs">
-    <button class="tab active" id="tab-btn-search" onclick="switchTab('search')">🔍 検索サポート</button>
-    <button class="tab"        id="tab-btn-calc"   onclick="switchTab('calc')">💰 利益計算</button>
+    <button class="tab active" id="tab-btn-search"   onclick="switchTab('search')">🔍 検索</button>
+    <button class="tab"        id="tab-btn-calc"     onclick="switchTab('calc')">💰 利益計算</button>
+    <button class="tab"        id="tab-btn-research" onclick="switchTab('research')">📊 リサーチ</button>
   </div>
 </div>
 
@@ -253,7 +272,6 @@
 <!-- ══════════ TAB 2: 利益計算 ══════════ -->
 <div class="tab-content" id="tab-calc">
 
-  <!-- 為替レート -->
   <div class="rate-banner">
     <span class="pulse" id="rateDot"></span>
     <span id="rateText">為替レート取得中...</span>
@@ -263,7 +281,6 @@
     <button class="refresh-link" onclick="fetchRate()">更新</button>
   </div>
 
-  <!-- 入力 -->
   <div class="card">
     <div class="card-title">📊 利益計算</div>
 
@@ -311,7 +328,7 @@
       <div class="form-group" id="nyanpayGroup">
         <label>ニャンペイ割引（12%オフ）を使う？</label>
         <div class="toggle-row">
-          <button class="toggle-btn"   id="btnNyanY" onclick="setNyanpay(true)">使う</button>
+          <button class="toggle-btn"    id="btnNyanY" onclick="setNyanpay(true)">使う</button>
           <button class="toggle-btn on" id="btnNyanN" onclick="setNyanpay(false)">使わない</button>
         </div>
       </div>
@@ -332,7 +349,6 @@
       </div>
     </div>
 
-    <!-- 詳細設定 -->
     <button class="settings-btn" onclick="toggleSettings()">
       <span>⚙️ 詳細設定（手数料・送料テーブル変更）</span>
       <span id="settingsArrow">▼</span>
@@ -389,14 +405,12 @@
     </div>
   </div>
 
-  <!-- 利益カード -->
   <div class="profit-card" id="profitCard">
     <div class="profit-label">最終利益</div>
     <div class="profit-amount" id="profitAmt">¥ —</div>
     <div class="profit-sub" id="profitSub">全項目を入力してください</div>
   </div>
 
-  <!-- 収支内訳 -->
   <div class="card">
     <div class="card-title">📋 収支内訳</div>
     <div class="result-row">
@@ -430,6 +444,176 @@
   </div>
 </div>
 
+<!-- ══════════ TAB 3: リサーチ ══════════ -->
+<div class="tab-content" id="tab-research">
+
+  <!-- Shopee台湾リサーチ -->
+  <div class="card">
+    <div class="card-title">🛒 Shopee台湾リサーチ</div>
+
+    <div class="form-group">
+      <label>カテゴリ</label>
+      <select id="shopeeCategory">
+        <option value="">-- カテゴリを選択（任意）--</option>
+        <option value="女裝">女性ファッション（女裝）</option>
+        <option value="男裝">男性ファッション（男裝）</option>
+        <option value="鞋子">シューズ（鞋子）</option>
+        <option value="包包 配件">バッグ・アクセサリー（包包）</option>
+        <option value="美妝 保養">美容・スキンケア（美妝）</option>
+        <option value="健康食品">健康食品・サプリ</option>
+        <option value="手機 配件">スマホ・アクセサリー（手機）</option>
+        <option value="3C 電子">家電・3C</option>
+        <option value="電腦 周邊">パソコン・周辺機器</option>
+        <option value="運動 戶外">スポーツ・アウトドア</option>
+        <option value="家居 生活">ホーム・インテリア（家居）</option>
+        <option value="嬰幼兒 玩具">ベビー・おもちゃ</option>
+        <option value="食品 飲料">食品・飲料</option>
+        <option value="寵物">ペット用品</option>
+        <option value="書籍 文具">本・文具</option>
+        <option value="電玩 遊戲">ゲーム・ホビー</option>
+        <option value="相機 攝影">カメラ・光学</option>
+        <option value="汽機車">車・バイク用品</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>ブランド・メーカー（日本語）</label>
+      <input type="text" id="shopeeBrand" placeholder="例：ノースフェイス、ユニクロ、資生堂">
+      <div class="hint">入力すると自動で繁体字に変換して検索します</div>
+    </div>
+
+    <div class="form-group">
+      <label>並び順</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="shopeeOrderSales" onclick="setShopeeOrder('sales')">売上順</button>
+        <button class="toggle-btn"   id="shopeeOrderNew"   onclick="setShopeeOrder('ctime')">新着順</button>
+        <button class="toggle-btn"   id="shopeeOrderPrice" onclick="setShopeeOrder('price')">価格順</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>日本発送フィルター</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="shopeeFromJpY" onclick="setShopeeFromJp(true)">日本発送のみ</button>
+        <button class="toggle-btn"   id="shopeeFromJpN" onclick="setShopeeFromJp(false)">すべて</button>
+      </div>
+    </div>
+
+    <button class="btn-full search-btn-shopee" onclick="openShopeeResearch()" style="margin-top:4px;">
+      🛒 Shopee台湾で売れ筋を検索 ↗
+    </button>
+  </div>
+
+  <!-- Yahoo!ショッピングリサーチ -->
+  <div class="card">
+    <div class="card-title">🟣 Yahoo!ショッピングリサーチ</div>
+
+    <div class="form-group">
+      <label>カテゴリ</label>
+      <select id="yahooCategory">
+        <option value="">-- カテゴリを選択（任意）--</option>
+        <option value="ファッション">ファッション</option>
+        <option value="レディースファッション">レディースファッション</option>
+        <option value="メンズファッション">メンズファッション</option>
+        <option value="シューズ">シューズ・靴</option>
+        <option value="バッグ アクセサリー">バッグ・アクセサリー</option>
+        <option value="美容 コスメ">美容・コスメ・香水</option>
+        <option value="ダイエット 健康">ダイエット・健康</option>
+        <option value="家電 テレビ カメラ">家電・テレビ・カメラ</option>
+        <option value="パソコン 周辺機器">パソコン・周辺機器</option>
+        <option value="スポーツ アウトドア">スポーツ・アウトドア</option>
+        <option value="ホビー おもちゃ ゲーム">ホビー・おもちゃ・ゲーム</option>
+        <option value="キッズ ベビー">キッズ・ベビー・マタニティ</option>
+        <option value="インテリア 寝具">インテリア・寝具・収納</option>
+        <option value="日用品 生活雑貨">日用品・生活雑貨</option>
+        <option value="食品 飲料">食品・飲料・お酒</option>
+        <option value="腕時計 アクセサリー">腕時計・ジュエリー</option>
+        <option value="車 バイク">車・バイク・自転車</option>
+        <option value="ペット ペットグッズ">ペット用品</option>
+        <option value="楽器 音響">楽器・音響機器</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>メーカー・ブランド・キーワード</label>
+      <input type="text" id="yahooKeyword" placeholder="例：ノースフェイス、ナイキ、象印">
+    </div>
+
+    <div class="form-group">
+      <label>商品の状態</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="yahooCondAll"  onclick="setYahooCondition('')">すべて</button>
+        <button class="toggle-btn"   id="yahooCondNew"  onclick="setYahooCondition('new')">新品</button>
+        <button class="toggle-btn"   id="yahooCondUsed" onclick="setYahooCondition('used')">中古</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>並び順</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="yahooOrderSold"  onclick="setYahooOrder('-sold')">売れ筋順</button>
+        <button class="toggle-btn"   id="yahooOrderPrice" onclick="setYahooOrder('priceatoz')">価格の安い順</button>
+        <button class="toggle-btn"   id="yahooOrderNew"   onclick="setYahooOrder('newold')">新着順</button>
+      </div>
+    </div>
+
+    <button class="btn-full search-btn-yahoo" onclick="openYahooResearch()" style="margin-top:4px;">
+      🟣 Yahoo!ショッピングで検索 ↗
+    </button>
+  </div>
+
+  <!-- メルカリリサーチ -->
+  <div class="card">
+    <div class="card-title">🔴 メルカリリサーチ（売れた商品）</div>
+
+    <div class="form-group">
+      <label>カテゴリ</label>
+      <select id="mercariCategory">
+        <option value="">-- カテゴリを選択（任意）--</option>
+        <option value="レディース">レディースファッション</option>
+        <option value="メンズ">メンズファッション</option>
+        <option value="ベビー キッズ">ベビー・キッズ</option>
+        <option value="おもちゃ ゲーム ホビー">おもちゃ・ゲーム・ホビー</option>
+        <option value="スポーツ アウトドア">スポーツ・アウトドア</option>
+        <option value="家電 カメラ">家電・カメラ</option>
+        <option value="スマートフォン 携帯電話">スマートフォン・携帯電話</option>
+        <option value="コスメ 美容">コスメ・美容</option>
+        <option value="インテリア 住まい">インテリア・住まい</option>
+        <option value="食品 飲料 お酒">食品・飲料・お酒</option>
+        <option value="本 雑誌 漫画">本・雑誌・漫画</option>
+        <option value="CD DVD 音楽">CD・DVD・音楽</option>
+        <option value="ハンドメイド">ハンドメイド</option>
+        <option value="バッグ 小物 財布">バッグ・小物・財布</option>
+        <option value="靴">靴</option>
+        <option value="腕時計 アクセサリー">腕時計・アクセサリー</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>ブランド・キーワード</label>
+      <input type="text" id="mercariKeyword" placeholder="例：ノースフェイス、ユニクロ、任天堂">
+    </div>
+
+    <div class="form-group">
+      <label>商品の状態</label>
+      <div class="toggle-row">
+        <button class="toggle-btn on" id="mercariCondAll"  onclick="setMercariCondition('')">すべて</button>
+        <button class="toggle-btn"   id="mercariCondNew"  onclick="setMercariCondition('new')">新品</button>
+        <button class="toggle-btn"   id="mercariCondUsed" onclick="setMercariCondition('used')">中古</button>
+      </div>
+    </div>
+
+    <button class="btn-full search-btn-mercari" onclick="openMercariResearch()" style="margin-top:4px;">
+      🔴 メルカリで売れた商品を検索 ↗
+    </button>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;">※ 「売り切れ」フィルターで実際に売れた商品を確認できます</div>
+  </div>
+
+  <div style="text-align:center; font-size:11px; color:#c0c0c0; padding:4px 0 28px;">
+    ※ 各ボタンでブラウザが開きます。結果はそれぞれのサイトで確認してください。
+  </div>
+</div>
+
 <script>
   // ── Tab switch ──────────────────────────────────────────────────────────────
   function switchTab(name) {
@@ -451,13 +635,11 @@
     document.getElementById('searchResult').style.display = 'none';
     currentSearchQuery = q;
     try {
-      // MyMemory API（高品質・繁体字中国語対応）
       const res  = await fetch(
         'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(q) + '&langpair=ja|zh-TW'
       );
       const data = await res.json();
       let zh = data.responseData.translatedText;
-      // フォールバック: MyMemory失敗時はGoogle利用
       if (!zh || data.responseStatus !== 200) {
         const res2 = await fetch(
           'https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=zh-TW&dt=t&q=' + encodeURIComponent(q)
@@ -491,10 +673,102 @@
     });
   }
 
-  // ── Shipping state ──────────────────────────────────────────────────────────
-  let isThin   = true;
-  let carrier  = 'yamato';
-  let nyanpay  = false;
+  // ── TAB 3: Research state ───────────────────────────────────────────────────
+  let shopeeOrder   = 'sales';
+  let shopeeFromJp  = true;
+  let yahooOrder    = '-sold';
+  let yahooCondition   = '';
+  let mercariCondition = '';
+
+  function setShopeeOrder(v) {
+    shopeeOrder = v;
+    ['Sales','New','Price'].forEach(k => document.getElementById('shopeeOrder'+k).classList.remove('on'));
+    const map = { sales:'Sales', ctime:'New', price:'Price' };
+    document.getElementById('shopeeOrder' + map[v]).classList.add('on');
+  }
+
+  function setShopeeFromJp(v) {
+    shopeeFromJp = v;
+    document.getElementById('shopeeFromJpY').classList.toggle('on',  v);
+    document.getElementById('shopeeFromJpN').classList.toggle('on', !v);
+  }
+
+  function setYahooOrder(v) {
+    yahooOrder = v;
+    ['Sold','Price','New'].forEach(k => document.getElementById('yahooOrder'+k).classList.remove('on'));
+    const map = { '-sold':'Sold', 'priceatoz':'Price', 'newold':'New' };
+    document.getElementById('yahooOrder' + map[v]).classList.add('on');
+  }
+
+  function setYahooCondition(v) {
+    yahooCondition = v;
+    document.getElementById('yahooCondAll').classList.toggle('on',  v === '');
+    document.getElementById('yahooCondNew').classList.toggle('on',  v === 'new');
+    document.getElementById('yahooCondUsed').classList.toggle('on', v === 'used');
+  }
+
+  function setMercariCondition(v) {
+    mercariCondition = v;
+    document.getElementById('mercariCondAll').classList.toggle('on',  v === '');
+    document.getElementById('mercariCondNew').classList.toggle('on',  v === 'new');
+    document.getElementById('mercariCondUsed').classList.toggle('on', v === 'used');
+  }
+
+  async function openShopeeResearch() {
+    const category = document.getElementById('shopeeCategory').value;
+    const brand    = document.getElementById('shopeeBrand').value.trim();
+
+    let keyword = '';
+    if (brand) {
+      // ブランド名を繁体字に翻訳
+      try {
+        const res  = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(brand) + '&langpair=ja|zh-TW');
+        const data = await res.json();
+        keyword = (data.responseStatus === 200 && data.responseData.translatedText)
+          ? data.responseData.translatedText : brand;
+      } catch { keyword = brand; }
+    }
+
+    const parts = [keyword, category].filter(Boolean);
+    if (!parts.length) { alert('カテゴリまたはブランドを入力してください'); return; }
+
+    const q = parts.join(' ');
+    let url = 'https://shopee.tw/search?keyword=' + encodeURIComponent(q)
+            + '&by=' + shopeeOrder + '&order=desc';
+    if (shopeeFromJp) url += '&locations=JP';
+    window.open(url, '_blank');
+  }
+
+  function openYahooResearch() {
+    const category = document.getElementById('yahooCategory').value;
+    const keyword  = document.getElementById('yahooKeyword').value.trim();
+    const parts = [keyword, category].filter(Boolean);
+    if (!parts.length) { alert('カテゴリまたはキーワードを入力してください'); return; }
+
+    let url = 'https://shopping.yahoo.co.jp/search?p=' + encodeURIComponent(parts.join(' '))
+            + '&sort=' + yahooOrder + '&tab_ex=commerce';
+    if (yahooCondition === 'new')  url += '&used=0';
+    if (yahooCondition === 'used') url += '&used=1';
+    window.open(url, '_blank');
+  }
+
+  function openMercariResearch() {
+    const category = document.getElementById('mercariCategory').value;
+    const keyword  = document.getElementById('mercariKeyword').value.trim();
+    const parts = [keyword, category].filter(Boolean);
+    if (!parts.length) { alert('カテゴリまたはキーワードを入力してください'); return; }
+
+    let url = 'https://jp.mercari.com/search?keyword=' + encodeURIComponent(parts.join(' '))
+            + '&status=sold_out&sort=sold_desc';
+    if (mercariCondition === 'new')  url += '&item_condition_id=1';
+    if (mercariCondition === 'used') url += '&item_condition_id=2,3,4,5,6';
+    window.open(url, '_blank');
+  }
+
+  // ── TAB 2: Shipping state ───────────────────────────────────────────────────
+  let isThin  = true;
+  let carrier = 'yamato';
+  let nyanpay = false;
 
   function setThin(val) {
     isThin = val;
@@ -518,7 +792,6 @@
     document.getElementById('opt170').disabled = (c === 'yamato');
     if (c === 'yubin'  && (sel.value === '180' || sel.value === '200')) sel.value = '';
     if (c === 'yamato' && sel.value === '170') sel.value = '';
-    // ニャンペイはヤマトのみ表示
     if (c === 'yubin') { nyanpay = false; updateNyanpayButtons(); }
     updateNyanpayVisibility();
     calcProfit();
@@ -552,8 +825,6 @@
     return rate;
   }
 
-  // 台湾SLS送料（TWD）を重量から計算
-  // 50g刻みで切り上げ、TWD = 23.7 + rounded_g × 0.13
   function getSlsRateTWD(g) {
     if (isNaN(g) || g <= 0) return null;
     if (g > 20000) return null;
@@ -606,7 +877,6 @@
     const intlShipTWD = getSlsRateTWD(weight);
     const intlShipJPY = (intlShipTWD != null && rate > 0) ? intlShipTWD * rate : null;
 
-    // 国内送料ラベル
     let domMethodStr;
     if (isThin) {
       domMethodStr = 'クリックポスト ' + (parseFloat(document.getElementById('thinRate').value) || 185) + '円';
@@ -618,17 +888,16 @@
     }
     document.getElementById('domLabel').textContent = '国内送料（' + domMethodStr + '）';
 
-    // 国際送料ラベル
     const intlWeightStr = weight > 0 && !isNaN(weight)
       ? weight + 'g → TWD' + (intlShipTWD != null ? intlShipTWD.toFixed(1) : '?')
       : '台湾SLS';
     document.getElementById('intlLabel').textContent = '国際送料（' + intlWeightStr + '）';
 
-    setRow('rSales', salesJPY != null ? yen(salesJPY)   : '—', false);
-    setRow('rFee',   fee      != null ? myen(fee)        : '—', true);
-    setRow('rNet',   net      != null ? yen(net)         : '—', false);
-    setRow('rCost',  hasCost           ? myen(cost)      : '—', true);
-    setRow('rDom',   domShip  != null  ? myen(domShip)   : '—', true);
+    setRow('rSales', salesJPY != null ? yen(salesJPY)        : '—', false);
+    setRow('rFee',   fee      != null ? myen(fee)             : '—', true);
+    setRow('rNet',   net      != null ? yen(net)              : '—', false);
+    setRow('rCost',  hasCost           ? myen(cost)           : '—', true);
+    setRow('rDom',   domShip  != null  ? myen(domShip)        : '—', true);
     setRow('rIntl',  intlShipJPY != null ? myen(intlShipJPY) : '—', true);
 
     const card = document.getElementById('profitCard');
