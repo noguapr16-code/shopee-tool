@@ -590,29 +590,12 @@
 
   <!-- Yahoo Shopping 最安値チェック -->
   <div class="card">
-    <div class="card-title">🟣 Yahoo Shopping 最安値（自動取得）</div>
+    <div class="card-title">🟣 Yahoo Shopping 最安値チェック</div>
 
-    <!-- App ID設定 -->
-    <div style="background:#f8f0ff;border:1px solid #e9d5ff;border-radius:10px;padding:10px;margin-bottom:12px;">
-      <div style="font-size:11px;font-weight:700;color:#7b00d4;margin-bottom:6px;">⚙️ Yahoo App ID（Client ID）</div>
-      <input type="text" id="yahooAppId" placeholder="Yahoo Developer ConsoleのClient IDを貼り付け"
-        style="width:100%;padding:7px 10px;border:1.5px solid #c084fc;border-radius:7px;font-size:12px;margin-bottom:4px;">
-      <div style="font-size:10px;color:var(--muted);line-height:1.6;">
-        取得方法：<strong>e.developer.yahoo.co.jp</strong> → アプリ一覧 → アプリ名クリック → <strong>「Client ID」</strong>をコピー
-      </div>
-    </div>
-
-    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6;">
-      各商品のポイント数はAPIから自動取得。クーポンがある場合のみ下に入力してください。
-    </div>
-
-    <div class="form-group">
-      <label>クーポン割引額（持っている場合のみ）</label>
-      <div style="display:flex;align-items:center;gap:6px;">
-        <input type="number" id="yahooCoupon" value="0" min="0" step="100" oninput="recalcYahooResults()"
-          style="width:100px;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;text-align:right;">
-        <span style="font-size:13px;color:var(--muted);">円　（例：500円OFFクーポン→500と入力）</span>
-      </div>
+    <!-- メインボタン：ブラウザで検索 -->
+    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.7;">
+      共通キーワードでYahoo Shoppingを開きます。<br>
+      <strong>安い順</strong>で表示→最安値の価格を確認→下の「手入力」欄に入力してください。
     </div>
 
     <div class="form-group">
@@ -623,22 +606,64 @@
         <button class="toggle-btn"   id="yahooCondUsed" onclick="setYahooCondition('used')">中古</button>
       </div>
     </div>
-    <div class="form-group">
-      <label>並び順</label>
-      <div class="toggle-row">
-        <button class="toggle-btn on" id="yahooOrderPrice" onclick="setYahooOrder('priceatoz')">安い順</button>
-        <button class="toggle-btn"   id="yahooOrderSold"   onclick="setYahooOrder('-sold')">売れ筋順</button>
-        <button class="toggle-btn"   id="yahooOrderNew"    onclick="setYahooOrder('newold')">新着順</button>
-      </div>
+
+    <!-- メインボタン -->
+    <button class="btn-full search-btn-yahoo" onclick="openYahooResearch()" style="font-size:15px;padding:14px;">
+      🟣 Yahoo Shoppingで最安値を確認 ↗
+    </button>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px;margin-bottom:16px;">
+      ↑ 自動で「安い順」+選択した状態で開きます
     </div>
 
-    <div style="display:flex;gap:8px;margin-top:4px;">
-      <button class="btn-full search-btn-yahoo" onclick="searchYahooInTool()" style="flex:2;font-size:13px;">
-        🔍 最安値を自動取得
+    <!-- 手入力エリア -->
+    <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:14px;">
+      <div style="font-size:13px;font-weight:700;color:var(--green);margin-bottom:12px;">✅ Yahooで確認した価格を入力</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+        <div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Yahoo最安値（税込）</div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <input type="number" id="yahooManualPrice" placeholder="例：3200" oninput="calcYahooEff()"
+              style="width:100%;padding:8px;border:1.5px solid #86efac;border-radius:8px;font-size:15px;text-align:right;">
+            <span style="font-size:12px;color:var(--muted);flex-shrink:0;">円</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">ポイント還元率（商品ページ確認）</div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <input type="number" id="yahooManualPoint" value="1" min="0" max="50" step="1" oninput="calcYahooEff()"
+              style="width:100%;padding:8px;border:1.5px solid #86efac;border-radius:8px;font-size:15px;text-align:right;">
+            <span style="font-size:12px;color:var(--muted);flex-shrink:0;">%</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:10px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">クーポン割引（持っている場合のみ）</div>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <input type="number" id="yahooManualCoupon" value="0" min="0" step="100" oninput="calcYahooEff()"
+            style="width:120px;padding:8px;border:1.5px solid #86efac;border-radius:8px;font-size:15px;text-align:right;">
+          <span style="font-size:12px;color:var(--muted);">円OFF</span>
+        </div>
+      </div>
+
+      <div id="yahooEffResult" style="display:none;background:white;border-radius:8px;padding:10px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <span style="font-size:12px;color:var(--muted);">実質仕入値（ポイント・クーポン引き後）</span>
+          <span style="font-size:22px;font-weight:800;color:var(--green);" id="yahooEffPrice">¥—</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;" id="yahooEffBreakdown"></div>
+      </div>
+
+      <button class="btn-full" onclick="useManualYahooPrice()" id="yahooEffUseBtn" style="display:none;background:var(--shopee);color:white;font-size:14px;padding:12px;">
+        📊 この価格で粗利計算する
       </button>
-      <button class="btn-full" onclick="openYahooResearch()" style="flex:1;background:#f3f4f6;color:var(--text);font-size:13px;">↗ ブラウザ</button>
     </div>
-    <div class="yahoo-results" id="yahooResults"></div>
+
+    <!-- 隠しフィールド（App ID保持用） -->
+    <input type="hidden" id="yahooAppId">
+    <input type="hidden" id="yahooCoupon" value="0">
+    <div class="yahoo-results" id="yahooResults" style="display:none;"></div>
   </div>
 
   <!-- 粗利シミュレーター：Shopee台湾で販売 -->
@@ -978,6 +1003,56 @@
     calcSimProfit();
     calcMerProfit();
     document.getElementById('simCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── Yahoo 手入力計算 ──────────────────────────────────────────────────────
+  function calcYahooEff() {
+    const price   = parseFloat(document.getElementById('yahooManualPrice').value);
+    const ptRate  = parseFloat(document.getElementById('yahooManualPoint').value) || 0;
+    const coupon  = parseFloat(document.getElementById('yahooManualCoupon').value) || 0;
+    const resultDiv  = document.getElementById('yahooEffResult');
+    const priceEl    = document.getElementById('yahooEffPrice');
+    const breakdownEl= document.getElementById('yahooEffBreakdown');
+    const useBtn     = document.getElementById('yahooEffUseBtn');
+
+    if (isNaN(price) || price <= 0) {
+      resultDiv.style.display = 'none';
+      useBtn.style.display    = 'none';
+      return;
+    }
+    const ptAmt  = Math.round(price * ptRate / 100);
+    const effCost = Math.max(0, price - ptAmt - coupon);
+
+    priceEl.textContent     = '¥' + effCost.toLocaleString();
+    breakdownEl.textContent = '¥' + price.toLocaleString()
+      + (ptAmt  > 0 ? ' − P' + ptRate + '%（¥' + ptAmt.toLocaleString() + '）' : '')
+      + (coupon > 0 ? ' − クーポン¥' + coupon.toLocaleString() : '');
+    resultDiv.style.display = 'block';
+    useBtn.style.display    = 'block';
+
+    // localStorage に自動保存
+    localStorage.setItem('yahoo_price', price);
+    localStorage.setItem('yahoo_point', ptRate);
+    localStorage.setItem('yahoo_coupon', coupon);
+  }
+
+  function useManualYahooPrice() {
+    const price   = parseFloat(document.getElementById('yahooManualPrice').value);
+    const ptRate  = parseFloat(document.getElementById('yahooManualPoint').value) || 0;
+    const coupon  = parseFloat(document.getElementById('yahooManualCoupon').value) || 0;
+    const ptAmt   = Math.round(price * ptRate / 100);
+    const effCost = Math.max(0, price - ptAmt - coupon);
+    useYahooPrice(effCost);
+  }
+
+  function restoreYahooInputs() {
+    const price  = localStorage.getItem('yahoo_price');
+    const point  = localStorage.getItem('yahoo_point');
+    const coupon = localStorage.getItem('yahoo_coupon');
+    if (price)  document.getElementById('yahooManualPrice').value  = price;
+    if (point)  document.getElementById('yahooManualPoint').value  = point;
+    if (coupon) document.getElementById('yahooManualCoupon').value = coupon;
+    if (price)  calcYahooEff();
   }
 
   // ── 粗利シミュレーター：Shopee台湾 ──────────────────────────────────────────
@@ -1342,6 +1417,7 @@
   document.getElementById('rateInput').value = DEFAULT_RATE.toFixed(2);
   updateNyanpayVisibility();
   fetchRate();
+  restoreYahooInputs();
 </script>
 </body>
 </html>
