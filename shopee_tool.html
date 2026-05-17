@@ -222,6 +222,21 @@
     }
     .tag:active { background: var(--shopee); color: white; }
 
+    /* ── Yahoo結果カード ── */
+    .yahoo-results { margin-top: 12px; display: none; }
+    .yahoo-item {
+      display: flex; gap: 10px; padding: 10px 0;
+      border-bottom: 1px solid var(--border); cursor: pointer;
+    }
+    .yahoo-item:last-child { border-bottom: none; }
+    .yahoo-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0; background: #f3f4f6; }
+    .yahoo-item-thumb { width: 60px; height: 60px; background: #f3f4f6; border-radius: 8px; flex-shrink: 0; }
+    .yahoo-item-info { flex: 1; min-width: 0; }
+    .yahoo-item-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .yahoo-item-price { font-size: 16px; font-weight: 700; color: var(--shopee); }
+    .yahoo-item-store { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .yahoo-use-btn { padding: 5px 10px; font-size: 12px; background: var(--shopee-light); color: var(--shopee); border: 1px solid #ffd4c8; border-radius: 6px; cursor: pointer; font-weight: 600; white-space: nowrap; flex-shrink: 0; font-family: inherit; }
+
     .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
@@ -557,9 +572,17 @@
       </div>
     </div>
 
-    <button class="btn-full search-btn-yahoo" onclick="openYahooResearch()" style="margin-top:4px;">
-      🟣 Yahoo!ショッピングで検索 ↗
-    </button>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button class="btn-full search-btn-yahoo" onclick="searchYahooInTool()" style="flex:2;">
+        🟣 ツール内で検索
+      </button>
+      <button class="btn-full" onclick="openYahooResearch()" style="flex:1;background:#f3f4f6;color:var(--text);font-size:13px;">
+        ↗ ブラウザ
+      </button>
+    </div>
+
+    <!-- 検索結果 -->
+    <div class="yahoo-results" id="yahooResults"></div>
   </div>
 
   <!-- メルカリリサーチ -->
@@ -671,6 +694,72 @@
       btn.textContent = '✅ コピーしました';
       setTimeout(() => { btn.textContent = orig; }, 2000);
     });
+  }
+
+  // ── Yahoo Shopping API ──────────────────────────────────────────────────────
+  const YAHOO_APP_ID = 'dmVyPTIwMjUwNyZpZD1Lck9qSGNGeU83Jmhhc2g9WkRNM1pHSTVZemhpTmpoa1l6RTRZZw';
+
+  function fetchJsonp(url) {
+    return new Promise((resolve, reject) => {
+      const cb = 'yj_' + Date.now();
+      const s = document.createElement('script');
+      window[cb] = (data) => { delete window[cb]; s.remove(); resolve(data); };
+      s.onerror = () => { delete window[cb]; s.remove(); reject(new Error('failed')); };
+      s.src = url + '&callback=' + cb;
+      document.head.appendChild(s);
+    });
+  }
+
+  async function searchYahooInTool() {
+    const category = document.getElementById('yahooCategory').value;
+    const keyword  = document.getElementById('yahooKeyword').value.trim();
+    const parts = [keyword, category].filter(Boolean);
+    if (!parts.length) { alert('カテゴリまたはキーワードを入力してください'); return; }
+
+    const container = document.getElementById('yahooResults');
+    container.style.display = 'block';
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);">検索中...</div>';
+
+    const query = parts.join(' ');
+    let sortParam = yahooOrder;
+    if (yahooCondition === 'new')  sortParam += '&condition=new';
+    if (yahooCondition === 'used') sortParam += '&condition=used';
+
+    const url = 'https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=' + YAHOO_APP_ID
+              + '&query=' + encodeURIComponent(query)
+              + '&results=10&sort=' + sortParam;
+    try {
+      const data = await fetchJsonp(url);
+      const hits = (data.hits || []);
+      if (!hits.length) {
+        container.innerHTML = '<div style="color:var(--muted);padding:10px;text-align:center;">結果が見つかりませんでした</div>';
+        return;
+      }
+      container.innerHTML = hits.map(item => {
+        const name  = (item.name || '').replace(/</g, '&lt;');
+        const price = item.price || 0;
+        const img   = (item.image && item.image.small) ? item.image.small : '';
+        const store = (item.seller && item.seller.name) ? item.seller.name : '';
+        const url2  = item.url || '#';
+        return '<div class="yahoo-item" onclick="window.open(\'' + url2 + '\', \'_blank\')">'
+          + (img ? '<img src="' + img + '" alt="" onerror="this.style.display=\'none\'">' : '<div class="yahoo-item-thumb"></div>')
+          + '<div class="yahoo-item-info">'
+          + '<div class="yahoo-item-name">' + name + '</div>'
+          + '<div class="yahoo-item-price">¥' + price.toLocaleString('ja-JP') + '</div>'
+          + '<div class="yahoo-item-store">' + store + '</div>'
+          + '</div>'
+          + '<button class="yahoo-use-btn" onclick="event.stopPropagation();usePriceInCalc(' + price + ')">仕入価格に<br>使う</button>'
+          + '</div>';
+      }).join('');
+    } catch(e) {
+      container.innerHTML = '<div style="color:var(--red);padding:10px;font-size:13px;">取得に失敗しました。右の「ブラウザ」ボタンをお試しください。</div>';
+    }
+  }
+
+  function usePriceInCalc(price) {
+    document.getElementById('costPrice').value = price;
+    switchTab('calc');
+    calcProfit();
   }
 
   // ── TAB 3: Research state ───────────────────────────────────────────────────
