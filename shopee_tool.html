@@ -224,38 +224,46 @@
 
     /* ── Yahoo結果カード ── */
     .yahoo-results { margin-top: 12px; display: none; }
-    .yahoo-item {
-      padding: 12px 0; border-bottom: 1px solid var(--border);
-    }
+    .yahoo-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
     .yahoo-item:last-child { border-bottom: none; }
-    .yahoo-item-top { display: flex; gap: 10px; margin-bottom: 8px; }
-    .yahoo-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; flex-shrink: 0; background: #f3f4f6; cursor:pointer; }
-    .yahoo-item-thumb { width: 64px; height: 64px; background: #f3f4f6; border-radius: 8px; flex-shrink: 0; cursor:pointer; }
-    .yahoo-item-info { flex: 1; min-width: 0; }
-    .yahoo-item-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; cursor:pointer; }
-    .yahoo-item-meta { display: flex; gap: 12px; font-size: 12px; align-items: center; flex-wrap: wrap; }
-    .yahoo-item-buy { font-size: 15px; font-weight: 700; color: var(--shopee); }
-    .yahoo-item-store { font-size: 11px; color: var(--muted); }
-    .yahoo-profit-box {
-      background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
-      padding: 8px 10px; display: grid;
-      grid-template-columns: 1fr 1fr; gap: 4px 10px;
-    }
-    .yahoo-profit-box.bad { background: #fff7f0; border-color: #fed7aa; }
-    .yahoo-profit-row { font-size: 11px; color: var(--muted); }
-    .yahoo-profit-val { font-size: 13px; font-weight: 700; }
-    .yahoo-profit-val.good { color: var(--green); }
-    .yahoo-profit-val.bad  { color: var(--red); }
-    .yahoo-profit-actions { display: flex; gap: 8px; margin-top: 8px; }
-    .yahoo-use-btn { flex: 1; padding: 8px; font-size: 12px; background: var(--shopee-light); color: var(--shopee); border: 1px solid #ffd4c8; border-radius: 8px; cursor: pointer; font-weight: 700; font-family: inherit; }
-    .yahoo-open-btn { padding: 8px 12px; font-size: 12px; background: #f3f4f6; color: var(--muted); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-family: inherit; }
-    .research-settings { background: var(--shopee-light); border-radius: 10px; padding: 12px; margin-bottom: 14px; }
-    .research-settings-title { font-size: 12px; font-weight: 700; color: var(--shopee); margin-bottom: 10px; }
-    .research-settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .research-settings-lbl { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-    .research-settings-row { display: flex; align-items: center; gap: 4px; }
-    .research-settings-row input { width: 80px; padding: 6px 8px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 14px; text-align: right; font-family: inherit; }
-    .research-settings-row span { font-size: 12px; color: var(--muted); }
+    .yahoo-item-row { display: flex; gap: 10px; align-items: flex-start; }
+    .yahoo-item img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; flex-shrink: 0; cursor: pointer; }
+    .yahoo-item-thumb { width: 60px; height: 60px; background: #f3f4f6; border-radius: 8px; flex-shrink: 0; cursor: pointer; }
+    .yahoo-item-body { flex: 1; min-width: 0; }
+    .yahoo-item-name { font-size: 12px; font-weight: 600; margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; cursor: pointer; line-height: 1.4; }
+    .yahoo-price-row { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+    .yahoo-list-price { font-size: 11px; color: var(--muted); text-decoration: line-through; }
+    .yahoo-buy-price { font-size: 16px; font-weight: 800; color: var(--shopee); }
+    .yahoo-point-badge { font-size: 11px; background: #fef3c7; color: #92400e; border-radius: 4px; padding: 1px 5px; font-weight: 700; }
+    .yahoo-eff-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .yahoo-eff-label { font-size: 11px; color: var(--muted); }
+    .yahoo-eff-price { font-size: 14px; font-weight: 800; color: var(--green); }
+    .yahoo-store { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+    .yahoo-actions { display: flex; gap: 6px; }
+    .yahoo-use-btn { flex: 1; padding: 7px 6px; font-size: 12px; background: var(--shopee-light); color: var(--shopee); border: 1px solid #ffd4c8; border-radius: 7px; cursor: pointer; font-weight: 700; font-family: inherit; }
+    .yahoo-open-btn { padding: 7px 10px; font-size: 12px; background: #f3f4f6; color: var(--muted); border: 1px solid var(--border); border-radius: 7px; cursor: pointer; font-family: inherit; }
+
+    /* ── 粗利シミュレーター ── */
+    .sim-result { background: var(--card); border-radius: 12px; padding: 14px; margin-top: 12px; border: 2px solid var(--border); display: none; }
+    .sim-result.profit  { border-color: #bbf7d0; background: #f0fdf4; }
+    .sim-result.loss    { border-color: #fecaca; background: #fff5f5; }
+    .sim-row { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; font-size: 13px; }
+    .sim-row-label { color: var(--muted); }
+    .sim-row-val { font-weight: 600; }
+    .sim-row-val.minus { color: var(--red); }
+    .sim-divider { border: none; border-top: 1.5px solid var(--border); margin: 6px 0; }
+    .sim-profit-row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0 2px; }
+    .sim-profit-label { font-size: 14px; font-weight: 700; }
+    .sim-profit-val { font-size: 22px; font-weight: 800; }
+    .sim-profit-val.good { color: var(--green); }
+    .sim-profit-val.bad  { color: var(--red); }
+    .sim-margin { text-align: right; font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* ── ワークフロー案内 ── */
+    .workflow-steps { display: flex; flex-direction: column; gap: 6px; margin: 12px 0; }
+    .workflow-step { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .step-badge { width: 20px; height: 20px; border-radius: 50%; background: var(--shopee); color: white; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .research-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -482,118 +490,50 @@
 <!-- ══════════ TAB 3: リサーチ ══════════ -->
 <div class="tab-content" id="tab-research">
 
-  <!-- Shopee台湾リサーチ -->
+  <!-- STEP ガイド -->
   <div class="card">
-    <div class="card-title">🛒 Shopee台湾リサーチ</div>
-
-    <div class="form-group">
-      <label>カテゴリ</label>
-      <select id="shopeeCategory">
-        <option value="">-- カテゴリを選択（任意）--</option>
-        <option value="女裝">女性ファッション（女裝）</option>
-        <option value="男裝">男性ファッション（男裝）</option>
-        <option value="鞋子">シューズ（鞋子）</option>
-        <option value="包包 配件">バッグ・アクセサリー（包包）</option>
-        <option value="美妝 保養">美容・スキンケア（美妝）</option>
-        <option value="健康食品">健康食品・サプリ</option>
-        <option value="手機 配件">スマホ・アクセサリー（手機）</option>
-        <option value="3C 電子">家電・3C</option>
-        <option value="電腦 周邊">パソコン・周辺機器</option>
-        <option value="運動 戶外">スポーツ・アウトドア</option>
-        <option value="家居 生活">ホーム・インテリア（家居）</option>
-        <option value="嬰幼兒 玩具">ベビー・おもちゃ</option>
-        <option value="食品 飲料">食品・飲料</option>
-        <option value="寵物">ペット用品</option>
-        <option value="書籍 文具">本・文具</option>
-        <option value="電玩 遊戲">ゲーム・ホビー</option>
-        <option value="相機 攝影">カメラ・光学</option>
-        <option value="汽機車">車・バイク用品</option>
-      </select>
+    <div class="card-title">📊 仕入れ利益リサーチ</div>
+    <div class="workflow-steps">
+      <div class="workflow-step"><div class="step-badge">1</div><div>メルカリ「売り切れ」で売れている商品を確認する</div></div>
+      <div class="workflow-step"><div class="step-badge">2</div><div>Shopee台湾で同じ商品の販売価格を確認する</div></div>
+      <div class="workflow-step"><div class="step-badge">3</div><div>Yahoo最安値をAPIで自動取得（ポイント・クーポン込み実質価格）</div></div>
+      <div class="workflow-step"><div class="step-badge">4</div><div>粗利シミュレーターで利益を即計算</div></div>
     </div>
-
-    <div class="form-group">
-      <label>ブランド・メーカー（日本語）</label>
-      <input type="text" id="shopeeBrand" placeholder="例：ノースフェイス、ユニクロ、資生堂">
-      <div class="hint">入力すると自動で繁体字に変換して検索します</div>
+    <div class="form-group" style="margin-bottom:8px;">
+      <label>共通キーワード（全サイト連動）</label>
+      <input type="text" id="researchKeyword" placeholder="例：ノースフェイス フリース">
     </div>
-
-    <div class="form-group">
-      <label>並び順</label>
-      <div class="toggle-row">
-        <button class="toggle-btn on" id="shopeeOrderSales" onclick="setShopeeOrder('sales')">売上順</button>
-        <button class="toggle-btn"   id="shopeeOrderNew"   onclick="setShopeeOrder('ctime')">新着順</button>
-        <button class="toggle-btn"   id="shopeeOrderPrice" onclick="setShopeeOrder('price')">価格順</button>
-      </div>
+    <div class="research-grid">
+      <button class="btn-full search-btn-mercari" onclick="openMercariSold()" style="font-size:13px;">🔴 メルカリ売り切れ ↗</button>
+      <button class="btn-full search-btn-shopee"  onclick="openShopeeResearch2()" style="font-size:13px;">🛒 Shopee台湾 ↗</button>
     </div>
-
-    <div class="form-group">
-      <label>日本発送フィルター</label>
-      <div class="toggle-row">
-        <button class="toggle-btn on" id="shopeeFromJpY" onclick="setShopeeFromJp(true)">日本発送のみ</button>
-        <button class="toggle-btn"   id="shopeeFromJpN" onclick="setShopeeFromJp(false)">すべて</button>
-      </div>
-    </div>
-
-    <button class="btn-full search-btn-shopee" onclick="openShopeeResearch()" style="margin-top:4px;">
-      🛒 Shopee台湾で売れ筋を検索 ↗
-    </button>
   </div>
 
-  <!-- Yahoo!ショッピングリサーチ -->
+  <!-- Yahoo Shopping 最安値チェック -->
   <div class="card">
-    <div class="card-title">🟣 Yahoo!ショッピングリサーチ</div>
+    <div class="card-title">🟣 Yahoo Shopping 最安値（自動取得）</div>
 
-    <!-- 利益計算前提設定 -->
-    <div class="research-settings">
-      <div class="research-settings-title">📦 利益計算の前提（検索結果に反映）</div>
-      <div class="research-settings-grid">
+    <!-- ポイント・クーポン設定 -->
+    <div style="background:#f8f0ff;border:1px solid #e9d5ff;border-radius:10px;padding:12px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:700;color:#7b00d4;margin-bottom:10px;">💎 実質仕入値の計算条件</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <div>
-          <div class="research-settings-lbl">想定重量（SLS送料計算）</div>
-          <div class="research-settings-row">
-            <input type="number" id="researchWeight" value="500" min="50" max="20000" step="50">
-            <span>g</span>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">ポイント還元率</div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <input type="number" id="yahooPointRate" value="1" min="0" max="50" step="0.5" oninput="recalcYahooResults()" style="width:72px;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;text-align:right;">
+            <span style="font-size:12px;color:var(--muted);">%</span>
           </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px;">通常1%、キャンペーン時は変更</div>
         </div>
         <div>
-          <div class="research-settings-lbl">目標利益</div>
-          <div class="research-settings-row">
-            <input type="number" id="researchTargetProfit" value="500" min="0" max="50000" step="100">
-            <span>円</span>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">クーポン割引額</div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <input type="number" id="yahooCoupon" value="0" min="0" step="100" oninput="recalcYahooResults()" style="width:72px;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;text-align:right;">
+            <span style="font-size:12px;color:var(--muted);">円</span>
           </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px;">クーポンがある場合に入力</div>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:8px;">※ 為替レートは利益計算タブの値を使用。Shopee手数料10%込み。</div>
-    </div>
-
-    <div class="form-group">
-      <label>カテゴリ</label>
-      <select id="yahooCategory">
-        <option value="">-- カテゴリを選択（任意）--</option>
-        <option value="ファッション">ファッション</option>
-        <option value="レディースファッション">レディースファッション</option>
-        <option value="メンズファッション">メンズファッション</option>
-        <option value="シューズ">シューズ・靴</option>
-        <option value="バッグ アクセサリー">バッグ・アクセサリー</option>
-        <option value="美容 コスメ">美容・コスメ・香水</option>
-        <option value="ダイエット 健康">ダイエット・健康</option>
-        <option value="家電 テレビ カメラ">家電・テレビ・カメラ</option>
-        <option value="パソコン 周辺機器">パソコン・周辺機器</option>
-        <option value="スポーツ アウトドア">スポーツ・アウトドア</option>
-        <option value="ホビー おもちゃ ゲーム">ホビー・おもちゃ・ゲーム</option>
-        <option value="キッズ ベビー">キッズ・ベビー・マタニティ</option>
-        <option value="インテリア 寝具">インテリア・寝具・収納</option>
-        <option value="日用品 生活雑貨">日用品・生活雑貨</option>
-        <option value="食品 飲料">食品・飲料・お酒</option>
-        <option value="腕時計 アクセサリー">腕時計・ジュエリー</option>
-        <option value="車 バイク">車・バイク・自転車</option>
-        <option value="ペット ペットグッズ">ペット用品</option>
-        <option value="楽器 音響">楽器・音響機器</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>メーカー・ブランド・キーワード</label>
-      <input type="text" id="yahooKeyword" placeholder="例：ノースフェイス、ナイキ、象印">
     </div>
 
     <div class="form-group">
@@ -604,78 +544,72 @@
         <button class="toggle-btn"   id="yahooCondUsed" onclick="setYahooCondition('used')">中古</button>
       </div>
     </div>
-
     <div class="form-group">
       <label>並び順</label>
       <div class="toggle-row">
-        <button class="toggle-btn on" id="yahooOrderSold"  onclick="setYahooOrder('-sold')">売れ筋順</button>
-        <button class="toggle-btn"   id="yahooOrderPrice" onclick="setYahooOrder('priceatoz')">価格の安い順</button>
-        <button class="toggle-btn"   id="yahooOrderNew"   onclick="setYahooOrder('newold')">新着順</button>
+        <button class="toggle-btn on" id="yahooOrderPrice" onclick="setYahooOrder('priceatoz')">安い順</button>
+        <button class="toggle-btn"   id="yahooOrderSold"   onclick="setYahooOrder('-sold')">売れ筋順</button>
+        <button class="toggle-btn"   id="yahooOrderNew"    onclick="setYahooOrder('newold')">新着順</button>
       </div>
     </div>
 
     <div style="display:flex;gap:8px;margin-top:4px;">
-      <button class="btn-full search-btn-yahoo" onclick="searchYahooInTool()" style="flex:2;">
-        🟣 ツール内で検索
+      <button class="btn-full search-btn-yahoo" onclick="searchYahooInTool()" style="flex:2;font-size:13px;">
+        🔍 最安値を自動取得
       </button>
-      <button class="btn-full" onclick="openYahooResearch()" style="flex:1;background:#f3f4f6;color:var(--text);font-size:13px;">
-        ↗ ブラウザ
-      </button>
+      <button class="btn-full" onclick="openYahooResearch()" style="flex:1;background:#f3f4f6;color:var(--text);font-size:13px;">↗ ブラウザ</button>
     </div>
 
-    <!-- 検索結果 -->
     <div class="yahoo-results" id="yahooResults"></div>
   </div>
 
-  <!-- メルカリリサーチ -->
-  <div class="card">
-    <div class="card-title">🔴 メルカリリサーチ（売れた商品）</div>
-
-    <div class="form-group">
-      <label>カテゴリ</label>
-      <select id="mercariCategory">
-        <option value="">-- カテゴリを選択（任意）--</option>
-        <option value="レディース">レディースファッション</option>
-        <option value="メンズ">メンズファッション</option>
-        <option value="ベビー キッズ">ベビー・キッズ</option>
-        <option value="おもちゃ ゲーム ホビー">おもちゃ・ゲーム・ホビー</option>
-        <option value="スポーツ アウトドア">スポーツ・アウトドア</option>
-        <option value="家電 カメラ">家電・カメラ</option>
-        <option value="スマートフォン 携帯電話">スマートフォン・携帯電話</option>
-        <option value="コスメ 美容">コスメ・美容</option>
-        <option value="インテリア 住まい">インテリア・住まい</option>
-        <option value="食品 飲料 お酒">食品・飲料・お酒</option>
-        <option value="本 雑誌 漫画">本・雑誌・漫画</option>
-        <option value="CD DVD 音楽">CD・DVD・音楽</option>
-        <option value="ハンドメイド">ハンドメイド</option>
-        <option value="バッグ 小物 財布">バッグ・小物・財布</option>
-        <option value="靴">靴</option>
-        <option value="腕時計 アクセサリー">腕時計・アクセサリー</option>
-      </select>
+  <!-- 粗利シミュレーター -->
+  <div class="card" id="simCard">
+    <div class="card-title">💴 粗利シミュレーター</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6;">
+      Yahoo最安値ボタン or 手入力で仕入値を設定。<br>Shopee台湾で確認した販売価格を入力してください。
     </div>
 
     <div class="form-group">
-      <label>ブランド・キーワード</label>
-      <input type="text" id="mercariKeyword" placeholder="例：ノースフェイス、ユニクロ、任天堂">
+      <label>実質仕入値 <span style="font-weight:400;font-size:11px;color:var(--muted)">（ポイント・クーポン引き後）</span></label>
+      <div class="input-with-unit">
+        <input type="number" id="simCost" placeholder="例：2800" oninput="calcSimProfit()">
+        <span class="unit">円</span>
+      </div>
     </div>
-
     <div class="form-group">
-      <label>商品の状態</label>
-      <div class="toggle-row">
-        <button class="toggle-btn on" id="mercariCondAll"  onclick="setMercariCondition('')">すべて</button>
-        <button class="toggle-btn"   id="mercariCondNew"  onclick="setMercariCondition('new')">新品</button>
-        <button class="toggle-btn"   id="mercariCondUsed" onclick="setMercariCondition('used')">中古</button>
+      <label>Shopee台湾 販売価格 <span style="font-weight:400;font-size:11px;color:var(--muted)">（Shopeeで確認した相場）</span></label>
+      <div class="input-with-unit">
+        <input type="number" id="simSellTwd" placeholder="例：850" oninput="calcSimProfit()">
+        <span class="unit">TWD</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label>想定重量</label>
+        <div class="input-with-unit">
+          <input type="number" id="simWeight" value="500" min="50" max="20000" step="50" oninput="calcSimProfit()">
+          <span class="unit">g</span>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label>国内送料</label>
+        <div class="input-with-unit">
+          <input type="number" id="simDomShip" value="0" min="0" step="10" oninput="calcSimProfit()">
+          <span class="unit">円</span>
+        </div>
       </div>
     </div>
 
-    <button class="btn-full search-btn-mercari" onclick="openMercariResearch()" style="margin-top:4px;">
-      🔴 メルカリで売れた商品を検索 ↗
+    <div class="sim-result" id="simResult"></div>
+
+    <button class="btn-full" onclick="sendSimToCalcTab()" id="simSendBtn" style="display:none;margin-top:10px;background:#f3f4f6;color:var(--text);font-size:13px;">
+      📊 利益計算タブで詳細確認
     </button>
-    <div style="font-size:11px;color:var(--muted);margin-top:8px;">※ 「売り切れ」フィルターで実際に売れた商品を確認できます</div>
   </div>
 
-  <div style="text-align:center; font-size:11px; color:#c0c0c0; padding:4px 0 28px;">
-    ※ 各ボタンでブラウザが開きます。結果はそれぞれのサイトで確認してください。
+  <div style="text-align:center;font-size:11px;color:#c0c0c0;padding:4px 0 28px;">
+    ※ Mercariはブラウザで確認、Shopee TW価格は手入力が必要です（API非公開のため）
   </div>
 </div>
 
@@ -740,155 +674,28 @@
 
   // ── Yahoo Shopping API ──────────────────────────────────────────────────────
   const YAHOO_APP_ID = 'dmVyPTIwMjUwNyZpZD1Lck9qSGNGeU83Jmhhc2g9WkRNM1pHSTVZemhpTmpoa1l6RTRZZw';
+  let yahooHits      = [];
+  let yahooOrder     = 'priceatoz';
+  let yahooCondition = '';
 
   function fetchJsonp(url, timeoutMs) {
     return new Promise((resolve, reject) => {
       const cb = 'yj_' + Date.now();
-      const s = document.createElement('script');
+      const s  = document.createElement('script');
       const timer = setTimeout(() => {
-        delete window[cb]; s.remove();
-        reject(new Error('timeout'));
+        delete window[cb]; s.remove(); reject(new Error('timeout'));
       }, timeoutMs || 10000);
-      window[cb] = (data) => { clearTimeout(timer); delete window[cb]; s.remove(); resolve(data); };
-      s.onerror = () => { clearTimeout(timer); delete window[cb]; s.remove(); reject(new Error('failed')); };
+      window[cb] = (d) => { clearTimeout(timer); delete window[cb]; s.remove(); resolve(d); };
+      s.onerror  = ()  => { clearTimeout(timer); delete window[cb]; s.remove(); reject(new Error('failed')); };
       s.src = url + '&callback=' + cb;
       document.head.appendChild(s);
     });
   }
 
-  async function searchYahooInTool() {
-    const category = document.getElementById('yahooCategory').value;
-    const keyword  = document.getElementById('yahooKeyword').value.trim();
-    const parts = [keyword, category].filter(Boolean);
-    if (!parts.length) { alert('カテゴリまたはキーワードを入力してください'); return; }
-
-    const container = document.getElementById('yahooResults');
-    container.style.display = 'block';
-    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);">検索中... ⏳</div>';
-
-    const query = parts.join(' ');
-    let sortParam = yahooOrder;
-    let condParam = '';
-    if (yahooCondition === 'new')  condParam = '&condition=new';
-    if (yahooCondition === 'used') condParam = '&condition=used';
-
-    const url = 'https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=' + YAHOO_APP_ID
-              + '&query=' + encodeURIComponent(query)
-              + '&results=15&sort=' + sortParam + condParam;
-    try {
-      const data = await fetchJsonp(url, 10000);
-      const hits = (data.hits || []);
-      if (!hits.length) {
-        container.innerHTML = '<div style="color:var(--muted);padding:10px;text-align:center;">結果が見つかりませんでした</div>';
-        return;
-      }
-
-      // 利益計算の前提を取得
-      const jpyPerTwd    = parseFloat(document.getElementById('rateInput').value) || 4.5;
-      const weight       = parseInt(document.getElementById('researchWeight').value) || 500;
-      const targetProfit = parseInt(document.getElementById('researchTargetProfit').value) || 500;
-      const slsTwd       = getSlsRateTWD(weight) || 89.7;
-      const slsJpy       = slsTwd * jpyPerTwd;
-
-      container.innerHTML = hits.map((item, idx) => {
-        const name  = (item.name || '').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-        const price = item.price || 0;
-        const img   = (item.image && item.image.small) ? item.image.small : '';
-        const store = (item.seller && item.seller.name) ? item.seller.name : '';
-        const url2  = item.url || '#';
-        const safeUrl2 = url2.replace(/'/g, '%27');
-
-        // 利益計算
-        // コスト = 仕入値(JPY) + SLS送料(JPY換算)
-        // 推奨Shopee価格 = (コスト + 目標利益) ÷ (0.9 × JPY/TWDレート)
-        const totalCostJpy   = price + slsJpy;
-        const recShopeeTwd   = Math.ceil((totalCostJpy + targetProfit) / (0.9 * jpyPerTwd));
-        const revenueJpy     = recShopeeTwd * 0.9 * jpyPerTwd;
-        const actualProfit   = Math.round(revenueJpy - totalCostJpy);
-        const marginPct      = Math.round(actualProfit / (recShopeeTwd * jpyPerTwd) * 100);
-        const isGood         = actualProfit >= targetProfit - 5;
-        const boxCls         = isGood ? '' : ' bad';
-        const valCls         = isGood ? 'good' : 'bad';
-        const profitSign     = actualProfit >= 0 ? '+' : '';
-
-        return '<div class="yahoo-item">'
-          // 上段：画像＋商品名＋仕入値
-          + '<div class="yahoo-item-top">'
-          + (img
-            ? '<img src="' + img + '" alt="" onerror="this.style.display=\'none\'" onclick="window.open(\'' + safeUrl2 + '\',\'_blank\')">'
-            : '<div class="yahoo-item-thumb" onclick="window.open(\'' + safeUrl2 + '\',\'_blank\')"></div>')
-          + '<div class="yahoo-item-info">'
-          + '<div class="yahoo-item-name" onclick="window.open(\'' + safeUrl2 + '\',\'_blank\')">' + name + '</div>'
-          + '<div class="yahoo-item-meta">'
-          + '<span class="yahoo-item-buy">仕入: ¥' + price.toLocaleString('ja-JP') + '</span>'
-          + '<span class="yahoo-item-store">' + store + '</span>'
-          + '</div>'
-          + '</div></div>'
-          // 利益計算ボックス
-          + '<div class="yahoo-profit-box' + boxCls + '">'
-          + '<div><div class="yahoo-profit-row">SLS送料（' + weight + 'g想定）</div>'
-          + '<div class="yahoo-profit-val">' + slsTwd.toFixed(1) + ' TWD</div></div>'
-          + '<div><div class="yahoo-profit-row">推奨Shopee価格</div>'
-          + '<div class="yahoo-profit-val">' + recShopeeTwd.toLocaleString() + ' TWD</div></div>'
-          + '<div><div class="yahoo-profit-row">推定利益</div>'
-          + '<div class="yahoo-profit-val ' + valCls + '">' + profitSign + actualProfit.toLocaleString() + '円</div></div>'
-          + '<div><div class="yahoo-profit-row">利益率</div>'
-          + '<div class="yahoo-profit-val ' + valCls + '">' + marginPct + '%</div></div>'
-          + '</div>'
-          // ボタン
-          + '<div class="yahoo-profit-actions">'
-          + '<button class="yahoo-use-btn" onclick="usePriceInCalcFull(' + price + ',' + recShopeeTwd + ')">📊 利益計算に使う</button>'
-          + '<button class="yahoo-open-btn" onclick="window.open(\'' + safeUrl2 + '\',\'_blank\')">↗ 商品ページ</button>'
-          + '</div>'
-          + '</div>';
-      }).join('');
-    } catch(e) {
-      const isTimeout = e.message === 'timeout';
-      container.innerHTML = '<div style="color:var(--red);padding:12px;font-size:13px;line-height:1.6;">'
-        + (isTimeout
-          ? '⏱ タイムアウト：Yahoo APIが応答しませんでした。<br>App IDが正しいか確認するか、「↗ ブラウザ」ボタンをご利用ください。'
-          : '❌ 取得に失敗しました。「↗ ブラウザ」ボタンをご利用ください。')
-        + '</div>';
-    }
-  }
-
-  function usePriceInCalcFull(costJpy, shopeeTwd) {
-    document.getElementById('costPrice').value  = costJpy;
-    document.getElementById('sellPrice').value  = shopeeTwd;
-    switchTab('calc');
-    calcProfit();
-  }
-
-  function usePriceInCalc(price) {
-    document.getElementById('costPrice').value = price;
-    switchTab('calc');
-    calcProfit();
-  }
-
-  // ── TAB 3: Research state ───────────────────────────────────────────────────
-  let shopeeOrder   = 'sales';
-  let shopeeFromJp  = true;
-  let yahooOrder    = '-sold';
-  let yahooCondition   = '';
-  let mercariCondition = '';
-
-  function setShopeeOrder(v) {
-    shopeeOrder = v;
-    ['Sales','New','Price'].forEach(k => document.getElementById('shopeeOrder'+k).classList.remove('on'));
-    const map = { sales:'Sales', ctime:'New', price:'Price' };
-    document.getElementById('shopeeOrder' + map[v]).classList.add('on');
-  }
-
-  function setShopeeFromJp(v) {
-    shopeeFromJp = v;
-    document.getElementById('shopeeFromJpY').classList.toggle('on',  v);
-    document.getElementById('shopeeFromJpN').classList.toggle('on', !v);
-  }
-
   function setYahooOrder(v) {
     yahooOrder = v;
-    ['Sold','Price','New'].forEach(k => document.getElementById('yahooOrder'+k).classList.remove('on'));
-    const map = { '-sold':'Sold', 'priceatoz':'Price', 'newold':'New' };
+    ['Price','Sold','New'].forEach(k => document.getElementById('yahooOrder'+k).classList.remove('on'));
+    const map = { 'priceatoz':'Price', '-sold':'Sold', 'newold':'New' };
     document.getElementById('yahooOrder' + map[v]).classList.add('on');
   }
 
@@ -899,61 +706,180 @@
     document.getElementById('yahooCondUsed').classList.toggle('on', v === 'used');
   }
 
-  function setMercariCondition(v) {
-    mercariCondition = v;
-    document.getElementById('mercariCondAll').classList.toggle('on',  v === '');
-    document.getElementById('mercariCondNew').classList.toggle('on',  v === 'new');
-    document.getElementById('mercariCondUsed').classList.toggle('on', v === 'used');
+  function renderYahooResults() {
+    const container   = document.getElementById('yahooResults');
+    if (!yahooHits.length) return;
+    const jpyPerTwd   = parseFloat(document.getElementById('rateInput').value) || 4.5;
+    const pointRate   = parseFloat(document.getElementById('yahooPointRate').value) || 1;
+    const coupon      = parseFloat(document.getElementById('yahooCoupon').value) || 0;
+
+    container.innerHTML = yahooHits.map(item => {
+      const name      = (item.name || '').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+      const listPrice = item.price || 0;
+      const img       = (item.image && item.image.small) ? item.image.small : '';
+      const store     = (item.seller && item.seller.name) ? item.seller.name : '';
+      const itemUrl   = (item.url || '#').replace(/'/g, '%27');
+      const apiPoint  = (item.point && item.point.premiumRate) ? item.point.premiumRate : pointRate;
+      const pointAmt  = Math.round(listPrice * apiPoint / 100);
+      const effCost   = Math.max(0, listPrice - pointAmt - coupon);
+
+      return '<div class="yahoo-item">'
+        + '<div class="yahoo-item-row">'
+        + (img
+          ? '<img src="' + img + '" alt="" onerror="this.style.display=\'none\'" onclick="window.open(\'' + itemUrl + '\',\'_blank\')">'
+          : '<div class="yahoo-item-thumb" onclick="window.open(\'' + itemUrl + '\',\'_blank\')"></div>')
+        + '<div class="yahoo-item-body">'
+        + '<div class="yahoo-item-name" onclick="window.open(\'' + itemUrl + '\',\'_blank\')">' + name + '</div>'
+        + '<div class="yahoo-price-row">'
+        + '<span class="yahoo-buy-price">¥' + listPrice.toLocaleString() + '</span>'
+        + '<span class="yahoo-point-badge">P' + apiPoint + '% -¥' + pointAmt.toLocaleString() + '</span>'
+        + (coupon > 0 ? '<span class="yahoo-point-badge" style="background:#d1fae5;color:#065f46;">クーポン -¥' + coupon.toLocaleString() + '</span>' : '')
+        + '</div>'
+        + '<div class="yahoo-eff-row">'
+        + '<span class="yahoo-eff-label">実質仕入値：</span>'
+        + '<span class="yahoo-eff-price">¥' + effCost.toLocaleString() + '</span>'
+        + '</div>'
+        + '<div class="yahoo-store">' + store + '</div>'
+        + '<div class="yahoo-actions">'
+        + '<button class="yahoo-use-btn" onclick="useYahooPrice(' + effCost + ')">📊 粗利シミュレーターに使う</button>'
+        + '<button class="yahoo-open-btn" onclick="window.open(\'' + itemUrl + '\',\'_blank\')">↗</button>'
+        + '</div>'
+        + '</div></div>'
+        + '</div>';
+    }).join('');
   }
 
-  async function openShopeeResearch() {
-    const category = document.getElementById('shopeeCategory').value;
-    const brand    = document.getElementById('shopeeBrand').value.trim();
+  function recalcYahooResults() {
+    if (yahooHits.length) renderYahooResults();
+  }
 
-    let keyword = '';
-    if (brand) {
-      // ブランド名を繁体字に翻訳
-      try {
-        const res  = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(brand) + '&langpair=ja|zh-TW');
-        const data = await res.json();
-        keyword = (data.responseStatus === 200 && data.responseData.translatedText)
-          ? data.responseData.translatedText : brand;
-      } catch { keyword = brand; }
+  async function searchYahooInTool() {
+    const keyword = document.getElementById('researchKeyword').value.trim();
+    if (!keyword) { alert('キーワードを入力してください'); return; }
+
+    const container = document.getElementById('yahooResults');
+    container.style.display = 'block';
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);">Yahoo最安値を取得中... ⏳</div>';
+    yahooHits = [];
+
+    let condParam = '';
+    if (yahooCondition === 'new')  condParam = '&condition=new';
+    if (yahooCondition === 'used') condParam = '&condition=used';
+
+    const url = 'https://shopping.yahooapis.jp/ShoppingWebService/V3/itemSearch?appid=' + YAHOO_APP_ID
+              + '&query=' + encodeURIComponent(keyword)
+              + '&results=15&sort=' + yahooOrder + condParam;
+    try {
+      const data = await fetchJsonp(url, 10000);
+      yahooHits  = data.hits || [];
+      if (!yahooHits.length) {
+        container.innerHTML = '<div style="color:var(--muted);padding:12px;text-align:center;">結果が見つかりませんでした<br><span style="font-size:11px;">「↗ ブラウザ」でYahoo Shoppingを直接確認できます</span></div>';
+        return;
+      }
+      renderYahooResults();
+    } catch(e) {
+      const msg = e.message === 'timeout'
+        ? '⏱ タイムアウト：Yahoo APIが応答しませんでした。<br>「↗ ブラウザ」ボタンをご利用ください。'
+        : '❌ API取得に失敗しました。App IDが正しいか確認するか、「↗ ブラウザ」ボタンをご利用ください。';
+      container.innerHTML = '<div style="color:var(--red);padding:12px;font-size:13px;line-height:1.7;">' + msg + '</div>';
+    }
+  }
+
+  function useYahooPrice(effCost) {
+    document.getElementById('simCost').value = effCost;
+    calcSimProfit();
+    document.getElementById('simCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── 粗利シミュレーター ──────────────────────────────────────────────────────
+  function calcSimProfit() {
+    const cost      = parseFloat(document.getElementById('simCost').value);
+    const sellTwd   = parseFloat(document.getElementById('simSellTwd').value);
+    const weight    = parseInt(document.getElementById('simWeight').value) || 500;
+    const domShip   = parseFloat(document.getElementById('simDomShip').value) || 0;
+    const jpyPerTwd = parseFloat(document.getElementById('rateInput').value) || 4.5;
+    const result    = document.getElementById('simResult');
+    const sendBtn   = document.getElementById('simSendBtn');
+
+    if (isNaN(cost) || isNaN(sellTwd) || sellTwd <= 0) {
+      result.style.display = 'none';
+      sendBtn.style.display = 'none';
+      return;
     }
 
-    const parts = [keyword, category].filter(Boolean);
-    if (!parts.length) { alert('カテゴリまたはブランドを入力してください'); return; }
+    const slsTwd        = getSlsRateTWD(weight) || 89.7;
+    const slsJpy        = slsTwd * jpyPerTwd;
+    const commissionTwd = sellTwd * 0.10;
+    const netSellTwd    = sellTwd * 0.90;
+    const revenueJpy    = netSellTwd * jpyPerTwd;
+    const totalCostJpy  = cost + domShip + slsJpy;
+    const profit        = Math.round(revenueJpy - totalCostJpy);
+    const marginPct     = sellTwd > 0
+      ? Math.round(profit / (sellTwd * jpyPerTwd) * 100) : 0;
+    const isProfit      = profit >= 0;
 
-    const q = parts.join(' ');
-    let url = 'https://shopee.tw/search?keyword=' + encodeURIComponent(q)
-            + '&by=' + shopeeOrder + '&order=desc';
-    if (shopeeFromJp) url += '&locations=JP';
-    window.open(url, '_blank');
+    result.className  = 'sim-result ' + (isProfit ? 'profit' : 'loss');
+    result.style.display = 'block';
+    sendBtn.style.display = 'block';
+
+    result.innerHTML =
+      row('Shopee販売価格', sellTwd.toLocaleString() + ' TWD', '') +
+      row('Shopee手数料 (10%)', '－' + commissionTwd.toFixed(0) + ' TWD', 'minus') +
+      row('Shopee手取り', netSellTwd.toFixed(0) + ' TWD → ¥' + Math.round(revenueJpy).toLocaleString(), '') +
+      '<hr class="sim-divider">' +
+      row('実質仕入値', '－¥' + cost.toLocaleString(), 'minus') +
+      (domShip > 0 ? row('国内送料', '－¥' + domShip.toLocaleString(), 'minus') : '') +
+      row('SLS国際送料 (' + weight + 'g)', '－' + slsTwd.toFixed(1) + ' TWD (¥' + Math.round(slsJpy).toLocaleString() + ')', 'minus') +
+      '<hr class="sim-divider">' +
+      '<div class="sim-profit-row">' +
+        '<span class="sim-profit-label">粗利</span>' +
+        '<span class="sim-profit-val ' + (isProfit ? 'good' : 'bad') + '">' +
+          (isProfit ? '＋' : '－') + '¥' + Math.abs(profit).toLocaleString() +
+        '</span>' +
+      '</div>' +
+      '<div class="sim-margin">利益率 ' + marginPct + '%</div>';
+  }
+
+  function row(label, val, cls) {
+    return '<div class="sim-row"><span class="sim-row-label">' + label + '</span>'
+      + '<span class="sim-row-val ' + cls + '">' + val + '</span></div>';
+  }
+
+  function sendSimToCalcTab() {
+    const cost    = document.getElementById('simCost').value;
+    const sell    = document.getElementById('simSellTwd').value;
+    if (cost)  document.getElementById('costPrice').value = cost;
+    if (sell)  document.getElementById('sellPrice').value = sell;
+    switchTab('calc');
+    calcProfit();
+  }
+
+  // ── ブラウザ起動（リサーチ用） ──────────────────────────────────────────────
+  function getResearchKeyword() {
+    return document.getElementById('researchKeyword').value.trim();
+  }
+
+  function openMercariSold() {
+    const kw = getResearchKeyword();
+    if (!kw) { alert('キーワードを入力してください'); return; }
+    window.open('https://jp.mercari.com/search?keyword=' + encodeURIComponent(kw)
+      + '&status=sold_out&sort=sold_desc', '_blank');
+  }
+
+  function openShopeeResearch2() {
+    const kw = getResearchKeyword();
+    if (!kw) { alert('キーワードを入力してください'); return; }
+    window.open('https://shopee.tw/search?keyword=' + encodeURIComponent(kw)
+      + '&by=sales&order=desc&locations=JP', '_blank');
   }
 
   function openYahooResearch() {
-    const category = document.getElementById('yahooCategory').value;
-    const keyword  = document.getElementById('yahooKeyword').value.trim();
-    const parts = [keyword, category].filter(Boolean);
-    if (!parts.length) { alert('カテゴリまたはキーワードを入力してください'); return; }
-
-    let url = 'https://shopping.yahoo.co.jp/search?p=' + encodeURIComponent(parts.join(' '))
+    const kw = getResearchKeyword();
+    if (!kw) { alert('キーワードを入力してください'); return; }
+    let url = 'https://shopping.yahoo.co.jp/search?p=' + encodeURIComponent(kw)
             + '&sort=' + yahooOrder + '&tab_ex=commerce';
     if (yahooCondition === 'new')  url += '&used=0';
     if (yahooCondition === 'used') url += '&used=1';
-    window.open(url, '_blank');
-  }
-
-  function openMercariResearch() {
-    const category = document.getElementById('mercariCategory').value;
-    const keyword  = document.getElementById('mercariKeyword').value.trim();
-    const parts = [keyword, category].filter(Boolean);
-    if (!parts.length) { alert('カテゴリまたはキーワードを入力してください'); return; }
-
-    let url = 'https://jp.mercari.com/search?keyword=' + encodeURIComponent(parts.join(' '))
-            + '&status=sold_out&sort=sold_desc';
-    if (mercariCondition === 'new')  url += '&item_condition_id=1';
-    if (mercariCondition === 'used') url += '&item_condition_id=2,3,4,5,6';
     window.open(url, '_blank');
   }
 
